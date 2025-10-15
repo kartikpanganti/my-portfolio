@@ -46,14 +46,17 @@ export const RecaptchaProvider = ({ children }) => {
       return;
     }
 
-    if (import.meta.env.DEV) {
+    // Force production mode check for Netlify
+    const isProduction = import.meta.env.PROD || window.location.hostname.includes('netlify.app') || window.location.hostname.includes('vercel.app');
+    
+    if (!isProduction) {
       console.log('reCAPTCHA: Loading script...');
     }
 
     // Check if script is already loaded
     const existingScript = document.querySelector(`script[src^="https://www.google.com/recaptcha/enterprise.js"]`);
     if (existingScript) {
-      if (import.meta.env.DEV) {
+      if (!isProduction) {
         console.log('reCAPTCHA: Script already exists, setting loaded state');
       }
       setRecaptchaLoaded(true);
@@ -66,8 +69,9 @@ export const RecaptchaProvider = ({ children }) => {
     script.src = `https://www.google.com/recaptcha/enterprise.js?render=${RECAPTCHA_SITE_KEY}`;
     script.async = true;
     script.defer = true;
+    script.crossOrigin = 'anonymous';
     script.onload = () => {
-      if (import.meta.env.DEV) {
+      if (!isProduction) {
         console.log('reCAPTCHA: Script loaded successfully');
       }
       setRecaptchaLoaded(true);
@@ -76,10 +80,11 @@ export const RecaptchaProvider = ({ children }) => {
     };
     script.onerror = (error) => {
       console.error('reCAPTCHA: Failed to load script', error);
+      console.error('reCAPTCHA: Check if domain is added to reCAPTCHA console');
     };
     document.head.appendChild(script);
 
-    if (import.meta.env.DEV) {
+    if (!isProduction) {
       console.log('reCAPTCHA: Script element added to document head');
     }
 
@@ -94,7 +99,13 @@ export const RecaptchaProvider = ({ children }) => {
 
   const executeRecaptcha = async (action = 'submit') => {
     if (!recaptchaLoaded || !window.grecaptcha || !window.grecaptcha.enterprise) {
-      throw new Error('reCAPTCHA Enterprise not loaded. Please refresh the page.');
+      // Check if we're on Netlify and reCAPTCHA failed to load
+      const isNetlify = window.location.hostname.includes('netlify.app');
+      const errorMessage = isNetlify 
+        ? 'reCAPTCHA service temporarily unavailable. Please try again in a moment.'
+        : 'reCAPTCHA Enterprise not loaded. Please refresh the page.';
+      
+      throw new Error(errorMessage);
     }
 
     return new Promise((resolve, reject) => {
@@ -103,6 +114,7 @@ export const RecaptchaProvider = ({ children }) => {
           const token = await window.grecaptcha.enterprise.execute(RECAPTCHA_SITE_KEY, { action });
           resolve(token);
         } catch (error) {
+          console.error('reCAPTCHA execution failed:', error);
           reject(error);
         }
       });
