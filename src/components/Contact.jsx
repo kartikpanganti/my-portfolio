@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaTwitter, FaPaperPlane, FaShieldAlt, FaLock } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
+import { useRecaptcha } from '../contexts/RecaptchaContext';
 
 const Contact = () => {
   const form = useRef();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ show: false, error: false, message: '' });
-  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+  const { recaptchaLoaded, RECAPTCHA_SITE_KEY, executeRecaptcha } = useRecaptcha();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,28 +17,23 @@ const Contact = () => {
   });
   const [errors, setErrors] = useState({});
 
-  // Your reCAPTCHA Enterprise Site Key
-  const RECAPTCHA_SITE_KEY = '6LeuZeorAAAAACj-bDl3iMj1w_ZsEDTiN48Cwg8u';
+  // EmailJS Configuration
+  const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-  // Load reCAPTCHA Enterprise script
+  // Validate environment variables
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${RECAPTCHA_SITE_KEY}`;
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      setRecaptchaLoaded(true);
-    };
-    document.head.appendChild(script);
+    const missingVars = [];
+    if (!RECAPTCHA_SITE_KEY) missingVars.push('VITE_RECAPTCHA_SITE_KEY');
+    if (!EMAILJS_SERVICE_ID) missingVars.push('VITE_EMAILJS_SERVICE_ID');
+    if (!EMAILJS_TEMPLATE_ID) missingVars.push('VITE_EMAILJS_TEMPLATE_ID');
+    if (!EMAILJS_PUBLIC_KEY) missingVars.push('VITE_EMAILJS_PUBLIC_KEY');
 
-    return () => {
-      // Cleanup
-      const scripts = document.querySelectorAll(`script[src^="https://www.google.com/recaptcha"]`);
-      scripts.forEach(script => script.remove());
-      const badges = document.querySelectorAll('.grecaptcha-badge');
-      badges.forEach(badge => badge.remove());
-    };
-  }, []);
+    if (missingVars.length > 0) {
+      console.error('Missing environment variables:', missingVars.join(', '));
+    }
+  }, [RECAPTCHA_SITE_KEY, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -134,22 +130,18 @@ const Contact = () => {
     setLoading(true);
 
     try {
+      // Validate environment variables before proceeding
+      if (!RECAPTCHA_SITE_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+        throw new Error('Configuration error. Please contact the site administrator.');
+      }
+
       // Check if reCAPTCHA Enterprise is loaded
-      if (!recaptchaLoaded || !window.grecaptcha || !window.grecaptcha.enterprise) {
+      if (!recaptchaLoaded) {
         throw new Error('reCAPTCHA Enterprise not loaded. Please refresh the page.');
       }
 
       // Execute reCAPTCHA Enterprise
-      const token = await new Promise((resolve, reject) => {
-        window.grecaptcha.enterprise.ready(async () => {
-          try {
-            const token = await window.grecaptcha.enterprise.execute(RECAPTCHA_SITE_KEY, { action: 'CONTACT_FORM' });
-            resolve(token);
-          } catch (error) {
-            reject(error);
-          }
-        });
-      });
+      const token = await executeRecaptcha('CONTACT_FORM');
 
       if (!token) {
         throw new Error('reCAPTCHA verification failed');
@@ -178,10 +170,10 @@ const Contact = () => {
       };
 
       await emailjs.send(
-        'service_kqb5az8',
-        'template_29v3266',
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
         templateParams,
-        'H4Zz3Tdb9SqT2ydV6'
+        EMAILJS_PUBLIC_KEY
       );
 
       showStatus(false, '✅ Message sent successfully! I\'ll get back to you soon.');

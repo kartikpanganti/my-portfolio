@@ -1,8 +1,44 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaTwitter, FaHeart, FaArrowUp } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaTwitter, FaHeart, FaArrowUp, FaShieldAlt } from 'react-icons/fa';
+import { useRecaptcha } from '../contexts/RecaptchaContext';
 
 const Footer = () => {
+  const { RECAPTCHA_SITE_KEY, toggleRecaptchaBadge } = useRecaptcha();
+  const footerRef = useRef(null);
+
+  // Intersection Observer to show reCAPTCHA badge when footer is visible
+  useEffect(() => {
+    const footer = footerRef.current;
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Footer is visible, show reCAPTCHA badge
+            toggleRecaptchaBadge(true);
+          } else {
+            // Footer is not visible, hide reCAPTCHA badge
+            toggleRecaptchaBadge(false);
+          }
+        });
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of footer is visible
+        rootMargin: '50px 0px', // Add some margin for smoother transition
+      }
+    );
+
+    observer.observe(footer);
+
+    return () => {
+      observer.disconnect();
+      // Hide badge when component unmounts
+      toggleRecaptchaBadge(false);
+    };
+  }, [toggleRecaptchaBadge]);
+
   const socialLinks = [
     {
       name: "LinkedIn",
@@ -39,7 +75,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-black dark:via-gray-900 dark:to-black text-white overflow-hidden">
+    <footer ref={footerRef} className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-black dark:via-gray-900 dark:to-black text-white overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-light rounded-full blur-3xl"></div>
@@ -148,36 +184,72 @@ const Footer = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col md:flex-row justify-between items-center gap-4"
+          className="flex flex-col space-y-4"
         >
-          <p className="text-gray-400 text-sm flex items-center gap-2">
-            <span>© 2025 Kartik Panganti. All rights reserved.</span>
-            <span className="hidden md:inline">•</span>
-            <span className="flex items-center gap-1">
-              Made with <motion.span
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
-              >
-                <FaHeart className="text-red-500" />
-              </motion.span>
-            </span>
-          </p>
-
-          {/* Back to Top Button */}
-          <motion.button
-            onClick={scrollToTop}
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-light to-secondary-light rounded-lg text-white font-medium shadow-lg hover:shadow-xl transition-all"
-          >
-            <span>Back to Top</span>
-            <motion.span
-              animate={{ y: [0, -3, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+          {/* reCAPTCHA Notice */}
+          {RECAPTCHA_SITE_KEY && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400"
             >
-              <FaArrowUp />
-            </motion.span>
-          </motion.button>
+              <FaShieldAlt className="text-green-500" />
+              <span>
+                This site is protected by reCAPTCHA Enterprise and the Google{' '}
+                <a 
+                  href="https://policies.google.com/privacy" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 underline"
+                >
+                  Privacy Policy
+                </a>{' '}
+                and{' '}
+                <a 
+                  href="https://policies.google.com/terms" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 underline"
+                >
+                  Terms of Service
+                </a>{' '}
+                apply.
+              </span>
+            </motion.div>
+          )}
+
+          {/* Copyright and Back to Top */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-400 text-sm flex items-center gap-2">
+              <span>© 2025 Kartik Panganti. All rights reserved.</span>
+              <span className="hidden md:inline">•</span>
+              <span className="flex items-center gap-1">
+                Made with <motion.span
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  <FaHeart className="text-red-500" />
+                </motion.span>
+              </span>
+            </p>
+
+            {/* Back to Top Button */}
+            <motion.button
+              onClick={scrollToTop}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-light to-secondary-light rounded-lg text-white font-medium shadow-lg hover:shadow-xl transition-all"
+            >
+              <span>Back to Top</span>
+              <motion.span
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <FaArrowUp />
+              </motion.span>
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </footer>

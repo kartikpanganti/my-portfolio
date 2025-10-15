@@ -1,27 +1,294 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaShare } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Sphere, MeshDistortMaterial, Float, Stars } from '@react-three/drei';
 import { useRef, useState, useEffect } from 'react';
+import * as THREE from 'three';
 import RESUMEE from '../assets/RESUME.pdf';
 
-const FloatingParticles = () => {
+// Dynamic animated background compatible with light/dark modes
+const DynamicBackground = () => {
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobileDevice(window.innerWidth < 768);
+    };
+    
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+    
+    checkMobile();
+    checkTheme();
+    
+    window.addEventListener('resize', checkMobile);
+    
+    // Listen for theme changes
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    });
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      observer.disconnect();
+    };
+  }, []);
+
+  // Animated particle ring system
+  const ParticleRing = ({ radius, count, color, speed, direction = 1 }) => {
+    const meshRef = useRef();
+    
+    useFrame((state) => {
+      if (meshRef.current) {
+        meshRef.current.rotation.y = state.clock.getElapsedTime() * speed * direction;
+        meshRef.current.rotation.z = Math.sin(state.clock.getElapsedTime() * 0.3) * 0.1;
+      }
+    });
+
+    const particles = Array.from({ length: count }, (_, i) => {
+      const angle = (i / count) * Math.PI * 2;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      const y = Math.sin(angle * 3) * 0.2; // Add vertical wave
+      return { x, y, z };
+    });
+
+    return (
+      <group ref={meshRef}>
+        {particles.map((pos, i) => (
+          <Float key={i} speed={1 + Math.random()} rotationIntensity={0.2} floatIntensity={0.3}>
+            <Sphere args={[0.08, 16, 16]} position={[pos.x, pos.y, pos.z]}>
+              <meshStandardMaterial
+                color={color}
+                emissive={color}
+                emissiveIntensity={isDark ? 0.6 : 0.8}
+                metalness={isDark ? 0.8 : 0.9}
+                roughness={isDark ? 0.2 : 0.1}
+                transparent
+                opacity={isDark ? 0.9 : 1.0}
+              />
+            </Sphere>
+          </Float>
+        ))}
+      </group>
+    );
+  };
+
+  // Pulsating energy core
+  const EnergyCore = () => {
+    const meshRef = useRef();
+    
+    useFrame((state) => {
+      if (meshRef.current) {
+        const pulse = Math.sin(state.clock.getElapsedTime() * 2) * 0.2 + 1;
+        meshRef.current.scale.setScalar(pulse);
+        meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.1;
+        meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
+      }
+    });
+
+    return (
+      <Float speed={2} rotationIntensity={0.3} floatIntensity={1}>
+        <group ref={meshRef}>
+          <Sphere args={[0.8, 64, 64]}>
+            <MeshDistortMaterial
+              color={isDark ? "#8B5CF6" : "#6366F1"}
+              distort={0.4}
+              speed={2}
+              roughness={0.1}
+              metalness={0.9}
+              emissive={isDark ? "#8B5CF6" : "#6366F1"}
+              emissiveIntensity={isDark ? 0.4 : 0.3}
+              transparent
+              opacity={isDark ? 0.8 : 0.7}
+            />
+          </Sphere>
+        </group>
+      </Float>
+    );
+  };
+
+  // Orbiting elements with trails
+  const OrbitingElement = ({ distance, speed, color, size, angle = 0 }) => {
+    const meshRef = useRef();
+    
+    useFrame((state) => {
+      if (meshRef.current) {
+        const time = state.clock.getElapsedTime() * speed + angle;
+        meshRef.current.position.x = Math.cos(time) * distance;
+        meshRef.current.position.z = Math.sin(time) * distance;
+        meshRef.current.position.y = Math.sin(time * 2) * 0.5;
+        meshRef.current.rotation.x = time;
+        meshRef.current.rotation.y = time * 1.5;
+      }
+    });
+
+    return (
+      <mesh ref={meshRef}>
+        <Sphere args={[size, 32, 32]}>
+          <meshStandardMaterial
+            color={color}
+            emissive={color}
+            emissiveIntensity={isDark ? 0.7 : 0.5}
+            metalness={1}
+            roughness={0}
+            transparent
+            opacity={isDark ? 0.9 : 0.8}
+          />
+        </Sphere>
+      </mesh>
+    );
+  };
+
   return (
-    <Canvas style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-      <ambientLight intensity={0.3} />
-      <directionalLight position={[2, 2, 5]} intensity={0.8} />
-      <Sphere args={[1, 50, 100]} scale={2.4}>
-        <MeshDistortMaterial
-          color="#4F46E5"
-          attach="material"
-          distort={0.2}
-          speed={1}
-          roughness={0.5}
-        />
-      </Sphere>
-      <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.3} />
+    <Canvas 
+      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
+      camera={{ position: [0, 0, 12], fov: 60 }}
+      dpr={[1, isMobileDevice ? 1.5 : 2]}
+    >
+      {/* Dynamic starfield */}
+      <Stars 
+        radius={150} 
+        depth={80} 
+        count={isMobileDevice ? 1500 : 2500} 
+        factor={isDark ? 6 : 4} 
+        saturation={0} 
+        fade 
+        speed={isDark ? 1 : 0.5}
+      />
+      
+      {/* Adaptive lighting */}
+      <ambientLight intensity={isDark ? 0.3 : 0.5} />
+      <directionalLight 
+        position={[10, 10, 5]} 
+        intensity={isDark ? 0.6 : 0.8} 
+        color={isDark ? "#E5E7EB" : "#F9FAFB"}
+      />
+      <pointLight 
+        position={[-8, -8, -8]} 
+        color={isDark ? "#8B5CF6" : "#6366F1"} 
+        intensity={isDark ? 0.6 : 0.4} 
+      />
+      <pointLight 
+        position={[8, -8, -8]} 
+        color={isDark ? "#EC4899" : "#F472B6"} 
+        intensity={isDark ? 0.6 : 0.4} 
+      />
+      
+      {/* Central energy core */}
+      <EnergyCore />
+      
+      {/* Multiple particle rings with different speeds and directions */}
+      {!isMobileDevice && (
+        <>
+          <ParticleRing 
+            radius={2.5} 
+            count={20} 
+            color={isDark ? "#8B5CF6" : "#4F46E5"} 
+            speed={0.2} 
+            direction={1} 
+          />
+          <ParticleRing 
+            radius={3.5} 
+            count={16} 
+            color={isDark ? "#EC4899" : "#E11D48"} 
+            speed={0.15} 
+            direction={-1} 
+          />
+          <ParticleRing 
+            radius={4.2} 
+            count={12} 
+            color={isDark ? "#3B82F6" : "#2563EB"} 
+            speed={0.1} 
+            direction={1} 
+          />
+        </>
+      )}
+      
+      {/* Mobile simplified rings */}
+      {isMobileDevice && (
+        <>
+          <ParticleRing 
+            radius={3} 
+            count={12} 
+            color={isDark ? "#8B5CF6" : "#4F46E5"} 
+            speed={0.2} 
+            direction={1} 
+          />
+          <ParticleRing 
+            radius={4} 
+            count={8} 
+            color={isDark ? "#EC4899" : "#F472B6"} 
+            speed={0.15} 
+            direction={-1} 
+          />
+        </>
+      )}
+      
+      {/* Orbiting elements */}
+      <OrbitingElement 
+        distance={5} 
+        speed={0.3} 
+        color={isDark ? "#EC4899" : "#F472B6"} 
+        size={0.15} 
+        angle={0} 
+      />
+      <OrbitingElement 
+        distance={6} 
+        speed={0.25} 
+        color={isDark ? "#3B82F6" : "#60A5FA"} 
+        size={0.12} 
+        angle={Math.PI} 
+      />
+      <OrbitingElement 
+        distance={4.5} 
+        speed={0.35} 
+        color={isDark ? "#10B981" : "#34D399"} 
+        size={0.1} 
+        angle={Math.PI / 2} 
+      />
+      
+      {/* Floating accent elements */}
+      <Float speed={1.5} rotationIntensity={2} floatIntensity={2}>
+        <Sphere args={[0.3, 32, 32]} position={[-6, 2, -3]}>
+          <meshStandardMaterial
+            color={isDark ? "#F59E0B" : "#FCD34D"}
+            emissive={isDark ? "#F59E0B" : "#FCD34D"}
+            emissiveIntensity={isDark ? 0.5 : 0.3}
+            metalness={0.8}
+            roughness={0.2}
+            transparent
+            opacity={0.8}
+          />
+        </Sphere>
+      </Float>
+      
+      <Float speed={1.8} rotationIntensity={1.5} floatIntensity={1.8}>
+        <Sphere args={[0.25, 32, 32]} position={[5, -2.5, -2]}>
+          <meshStandardMaterial
+            color={isDark ? "#EF4444" : "#F87171"}
+            emissive={isDark ? "#EF4444" : "#F87171"}
+            emissiveIntensity={isDark ? 0.5 : 0.3}
+            metalness={0.8}
+            roughness={0.2}
+            transparent
+            opacity={0.8}
+          />
+        </Sphere>
+      </Float>
+      
+      <OrbitControls 
+        enableZoom={false} 
+        autoRotate 
+        autoRotateSpeed={isDark ? 0.4 : 0.2}
+        enablePan={false}
+      />
     </Canvas>
   );
 };
@@ -73,17 +340,13 @@ const Hero = () => {
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-background-light to-gray-50 dark:from-background-dark dark:to-gray-900"
     >
-      {/* Animated background - Only render 3D on desktop for performance */}
-      {!isMobile && (
-        <div className="absolute inset-0 opacity-30 dark:opacity-20">
-          <FloatingParticles />
-        </div>
-      )}
+      {/* Dynamic 3D background for all devices */}
+      <div className="absolute inset-0 opacity-50 dark:opacity-40">
+        <DynamicBackground />
+      </div>
       
-      {/* Simple gradient background for mobile */}
-      {isMobile && (
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 dark:from-indigo-500/5 dark:via-purple-500/5 dark:to-pink-500/5" />
-      )}
+      {/* Enhanced gradient background with theme awareness */}
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/8 to-pink-500/10 dark:from-indigo-500/15 dark:via-purple-500/12 dark:to-pink-500/15" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 md:py-24 lg:py-32 relative z-10">
         <motion.div 
@@ -165,13 +428,31 @@ const Hero = () => {
               {[
                 { icon: FaGithub, href: "https://github.com/kartikpanaganti" },
                 { icon: FaLinkedin, href: "https://linkedin.com/in/kartikpanaganti" },
-                { icon: FaXTwitter, href: "https://x.com/kartikpanaganti"}
+                { icon: FaXTwitter, href: "https://x.com/kartikpanaganti"},
+                { 
+                  icon: FaShare, 
+                  href: "#", 
+                  isShare: true,
+                  onClick: () => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: 'Kartik Panganti - Full Stack Developer',
+                        text: 'Check out my portfolio and projects!',
+                        url: window.location.href
+                      });
+                    } else {
+                      navigator.clipboard.writeText(window.location.href);
+                      alert('Portfolio link copied to clipboard!');
+                    }
+                  }
+                }
               ].map((social, index) => (
                 <motion.a
                   key={index}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={social.isShare ? "#" : social.href}
+                  target={social.isShare ? "_self" : "_blank"}
+                  rel={social.isShare ? "" : "noopener noreferrer"}
+                  onClick={social.onClick || undefined}
                   whileHover={{ scale: 1.2, rotate: 5 }}
                   whileTap={{ scale: 0.9 }}
                   className="text-gray-600 dark:text-gray-400 hover:text-primary-light dark:hover:text-primary-dark transition-colors duration-300"
@@ -264,6 +545,9 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      
+      {/* Bottom gradient blend for smooth section transition */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 md:h-48 bg-gradient-to-b from-transparent via-white/50 to-white dark:from-transparent dark:via-gray-900/50 dark:to-gray-900 z-10 pointer-events-none" />
     </section>
   );
 };
