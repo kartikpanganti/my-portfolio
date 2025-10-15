@@ -212,7 +212,7 @@ const Hero = () => {
                 {/* Image Wrapper */}
                 <div className="relative w-full h-full rounded-full overflow-hidden ring-4 ring-white/80 dark:ring-gray-800/80 backdrop-blur-sm">
                   <img
-                    src="/profile.jpg"
+                    src="/profile1.png"
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
