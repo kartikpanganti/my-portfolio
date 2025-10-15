@@ -30,10 +30,21 @@ const Contact = () => {
     if (!EMAILJS_TEMPLATE_ID) missingVars.push('VITE_EMAILJS_TEMPLATE_ID');
     if (!EMAILJS_PUBLIC_KEY) missingVars.push('VITE_EMAILJS_PUBLIC_KEY');
 
+    if (import.meta.env.DEV) {
+      console.log('Contact Form Environment Check:', {
+        RECAPTCHA_SITE_KEY: RECAPTCHA_SITE_KEY ? `${RECAPTCHA_SITE_KEY.substring(0, 10)}...` : 'MISSING',
+        EMAILJS_SERVICE_ID: EMAILJS_SERVICE_ID ? `${EMAILJS_SERVICE_ID.substring(0, 10)}...` : 'MISSING',
+        EMAILJS_TEMPLATE_ID: EMAILJS_TEMPLATE_ID ? `${EMAILJS_TEMPLATE_ID.substring(0, 10)}...` : 'MISSING',
+        EMAILJS_PUBLIC_KEY: EMAILJS_PUBLIC_KEY ? `${EMAILJS_PUBLIC_KEY.substring(0, 10)}...` : 'MISSING',
+        missingVars,
+        recaptchaLoaded
+      });
+    }
+
     if (missingVars.length > 0) {
       console.error('Missing environment variables:', missingVars.join(', '));
     }
-  }, [RECAPTCHA_SITE_KEY, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY]);
+  }, [RECAPTCHA_SITE_KEY, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY, recaptchaLoaded]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

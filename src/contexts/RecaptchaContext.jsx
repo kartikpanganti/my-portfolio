@@ -15,6 +15,18 @@ export const RecaptchaProvider = ({ children }) => {
   const [showRecaptchaBadge, setShowRecaptchaBadge] = useState(false);
   const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
+  // Debug logging for environment variables (only in actual development)
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      console.log('reCAPTCHA Environment Check:', {
+        RECAPTCHA_SITE_KEY: RECAPTCHA_SITE_KEY ? `${RECAPTCHA_SITE_KEY.substring(0, 10)}...` : 'MISSING',
+        hasKey: !!RECAPTCHA_SITE_KEY,
+        env: import.meta.env.MODE,
+        allViteEnvs: Object.keys(import.meta.env).filter(key => key.startsWith('VITE_'))
+      });
+    }
+  }, [RECAPTCHA_SITE_KEY]);
+
   // Function to hide/show reCAPTCHA badge
   const toggleRecaptchaBadge = (show) => {
     const badge = document.querySelector('.grecaptcha-badge');
@@ -27,11 +39,23 @@ export const RecaptchaProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!RECAPTCHA_SITE_KEY) return;
+    if (!RECAPTCHA_SITE_KEY) {
+      if (import.meta.env.DEV) {
+        console.warn('reCAPTCHA: Site key not found. reCAPTCHA will not be loaded.');
+      }
+      return;
+    }
+
+    if (import.meta.env.DEV) {
+      console.log('reCAPTCHA: Loading script...');
+    }
 
     // Check if script is already loaded
     const existingScript = document.querySelector(`script[src^="https://www.google.com/recaptcha/enterprise.js"]`);
     if (existingScript) {
+      if (import.meta.env.DEV) {
+        console.log('reCAPTCHA: Script already exists, setting loaded state');
+      }
       setRecaptchaLoaded(true);
       // Hide badge initially
       setTimeout(() => toggleRecaptchaBadge(false), 100);
@@ -43,11 +67,21 @@ export const RecaptchaProvider = ({ children }) => {
     script.async = true;
     script.defer = true;
     script.onload = () => {
+      if (import.meta.env.DEV) {
+        console.log('reCAPTCHA: Script loaded successfully');
+      }
       setRecaptchaLoaded(true);
       // Hide badge initially after script loads
       setTimeout(() => toggleRecaptchaBadge(false), 100);
     };
+    script.onerror = (error) => {
+      console.error('reCAPTCHA: Failed to load script', error);
+    };
     document.head.appendChild(script);
+
+    if (import.meta.env.DEV) {
+      console.log('reCAPTCHA: Script element added to document head');
+    }
 
     return () => {
       // Clean up script and badges on unmount
