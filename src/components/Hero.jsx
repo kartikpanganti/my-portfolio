@@ -7,6 +7,7 @@ import { OrbitControls, Sphere, MeshDistortMaterial, Float, Stars } from '@react
 import { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import RESUMEE from '../assets/RESUME.pdf';
+import profileImage from '../assets/profile.png';
 
 // Dynamic animated background compatible with light/dark modes
 const DynamicBackground = () => {
@@ -493,7 +494,7 @@ const Hero = () => {
                 {/* Image Wrapper */}
                 <div className="relative w-full h-full rounded-full overflow-hidden ring-4 ring-white/80 dark:ring-gray-800/80 backdrop-blur-sm">
                   <img
-                    src="/profile1.png"
+                    src={profileImage}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
