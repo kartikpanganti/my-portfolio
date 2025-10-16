@@ -8,7 +8,14 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(() => {
+    // Check localStorage for theme preference
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'light') return false;
+    if (storedTheme === 'dark') return true;
+    // Default to dark
+    return true;
+  });
 
   const navItems = [
     { name: 'Home', to: 'hero' },
@@ -36,9 +43,24 @@ const Navbar = () => {
 
   // Toggle dark mode
   const toggleDarkMode = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle('dark');
+    const newIsDark = !isDark;
+    setIsDark(newIsDark);
+    if (newIsDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
   };
+  // On mount, apply theme from localStorage
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
 
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -52,9 +74,9 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.3 }}
+  initial={{ y: -100 }}
+  animate={{ y: 0 }}
+  transition={{ duration: 0.15 }}
       className={`fixed w-full top-0 z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-white/95 dark:bg-gray-900/95 md:bg-white/90 md:dark:bg-gray-900/90 md:backdrop-blur-md shadow-lg'
@@ -67,7 +89,7 @@ const Navbar = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.25, delay: 0.05 }}
             className="flex-shrink-0"
           >
             <Link
@@ -101,7 +123,7 @@ const Navbar = () => {
                   key={item.name}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 * index }}
+                  transition={{ duration: 0.2, delay: 0.03 * index }}
                 >
                   <Link
                     to={item.to}
@@ -140,7 +162,7 @@ const Navbar = () => {
             <motion.button
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.2 }}
               onClick={toggleDarkMode}
               className={`p-2 rounded-lg transition-all duration-300 ${
                 scrolled
@@ -163,7 +185,7 @@ const Navbar = () => {
                     initial={{ rotate: -180, opacity: 0 }}
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: 180, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.15 }}
                   >
                     <FaMoon className="w-5 h-5" />
                   </motion.div>
@@ -173,7 +195,7 @@ const Navbar = () => {
                     initial={{ rotate: 180, opacity: 0 }}
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: -180, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.15 }}
                   >
                     <FaSun className="w-5 h-5" />
                   </motion.div>
@@ -185,7 +207,7 @@ const Navbar = () => {
             <motion.button
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.2 }}
               onClick={(e) => {
                 e.stopPropagation();
                 setIsOpen(!isOpen);
@@ -211,7 +233,7 @@ const Navbar = () => {
                     initial={{ rotate: -90, opacity: 0 }}
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.1 }}
                   >
                     <HiX className="w-6 h-6" />
                   </motion.div>
@@ -221,7 +243,7 @@ const Navbar = () => {
                     initial={{ rotate: 90, opacity: 0 }}
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.1 }}
                   >
                     <HiMenu className="w-6 h-6" />
                   </motion.div>
@@ -239,7 +261,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.15 }}
             className="md:hidden overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md"
             onClick={(e) => e.stopPropagation()}
           >
@@ -249,7 +271,7 @@ const Navbar = () => {
                   key={item.name}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 0.05 * index }}
+                  transition={{ duration: 0.12, delay: 0.02 * index }}
                 >
                   <Link
                     to={item.to}

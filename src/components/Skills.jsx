@@ -53,7 +53,7 @@ const Skills = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.3
+        duration: 0.13
       }
     }
   };
@@ -64,7 +64,7 @@ const Skills = () => {
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.2
+        duration: 0.09
       }
     }
   };
@@ -79,7 +79,7 @@ const Skills = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.22 }}
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
@@ -125,8 +125,7 @@ const Skills = () => {
                       {/* Icon with glow effect */}
                       <motion.div 
                         className="text-5xl mb-3 relative"
-                        whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-                        transition={{ duration: 0.5 }}
+                        transition={{ duration: 0.18 }}
                       >
                         <div className="absolute inset-0 blur-xl opacity-50 group-hover:opacity-100 transition-opacity">
                           {skill.icon}
@@ -147,7 +146,7 @@ const Skills = () => {
                           initial={{ width: 0 }}
                           whileInView={{ width: `${skill.level}%` }}
                           viewport={{ once: true }}
-                          transition={{ duration: 1, delay: skillIndex * 0.1 }}
+                          transition={{ duration: 0.35, delay: skillIndex * 0.03 }}
                           className={`h-full bg-gradient-to-r ${skill.color} rounded-full`}
                         />
                       </div>

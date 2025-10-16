@@ -22,9 +22,9 @@ const Contact = () => {
   const [errors, setErrors] = useState({});
 
   // EmailJS Configuration
-  const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_kqb5az8';
-  const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_29v3266';
-  const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'H4Zz3Tdb9SqT2ydV6';
+  const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
   // Validate environment variables
   useEffect(() => {
@@ -34,16 +34,7 @@ const Contact = () => {
     if (!EMAILJS_TEMPLATE_ID) missingVars.push('VITE_EMAILJS_TEMPLATE_ID');
     if (!EMAILJS_PUBLIC_KEY) missingVars.push('VITE_EMAILJS_PUBLIC_KEY');
 
-    if (import.meta.env.DEV) {
-      console.log('Contact Form Environment Check:', {
-        RECAPTCHA_SITE_KEY: RECAPTCHA_SITE_KEY ? `${RECAPTCHA_SITE_KEY.substring(0, 10)}...` : 'MISSING',
-        EMAILJS_SERVICE_ID: EMAILJS_SERVICE_ID ? `${EMAILJS_SERVICE_ID.substring(0, 10)}...` : 'MISSING',
-        EMAILJS_TEMPLATE_ID: EMAILJS_TEMPLATE_ID ? `${EMAILJS_TEMPLATE_ID.substring(0, 10)}...` : 'MISSING',
-        EMAILJS_PUBLIC_KEY: EMAILJS_PUBLIC_KEY ? `${EMAILJS_PUBLIC_KEY.substring(0, 10)}...` : 'MISSING',
-        missingVars,
-        recaptchaLoaded
-      });
-    }
+    // Removed debug log
 
     if (missingVars.length > 0) {
       console.error('Missing environment variables:', missingVars.join(', '));
@@ -923,7 +914,7 @@ const Contact = () => {
                     href={contactInfo.social.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     className="p-4 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all"
                   >
@@ -933,7 +924,7 @@ const Contact = () => {
                     href={contactInfo.social.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     className="p-4 rounded-xl bg-gradient-to-br from-gray-700 to-gray-900 text-white shadow-lg hover:shadow-xl transition-all"
                   >
@@ -943,7 +934,7 @@ const Contact = () => {
                     href={contactInfo.social.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     className="p-4 rounded-xl bg-gradient-to-br from-gray-700 to-gray-900 text-white shadow-lg hover:shadow-xl transition-all"
                   >

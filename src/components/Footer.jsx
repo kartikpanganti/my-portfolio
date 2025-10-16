@@ -91,7 +91,7 @@ const Footer = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.22 }}
             className="space-y-4"
           >
             <h3 className="text-2xl font-bold bg-gradient-to-r from-primary-light to-secondary-light bg-clip-text text-transparent">
@@ -128,7 +128,7 @@ const Footer = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.13, delay: 0.03 }}
             className="space-y-4"
           >
             <h4 className="text-lg font-bold text-white mb-4">Quick Links</h4>
@@ -152,7 +152,7 @@ const Footer = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.13, delay: 0.05 }}
             className="space-y-4"
           >
             <h4 className="text-lg font-bold text-white mb-4">Get In Touch</h4>
@@ -175,7 +175,7 @@ const Footer = () => {
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.22 }}
           className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mb-8"
         />
 
@@ -184,7 +184,7 @@ const Footer = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.13, delay: 0.07 }}
           className="flex flex-col space-y-4"
         >
           {/* reCAPTCHA Notice */}
@@ -192,7 +192,7 @@ const Footer = () => {
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.13, delay: 0.09 }}
               className="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400"
             >
               <FaShieldAlt className="text-green-500" />
@@ -228,7 +228,7 @@ const Footer = () => {
               <span className="flex items-center gap-1">
                 Made with <motion.span
                   animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
+                  transition={{ duration: 0.5, repeat: Infinity }}
                 >
                   <FaHeart className="text-red-500" />
                 </motion.span>
@@ -245,7 +245,7 @@ const Footer = () => {
               <span>Back to Top</span>
               <motion.span
                 animate={{ y: [0, -3, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
+                transition={{ duration: 0.7, repeat: Infinity }}
               >
                 <FaArrowUp />
               </motion.span>

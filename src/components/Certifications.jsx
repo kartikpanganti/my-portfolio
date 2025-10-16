@@ -201,20 +201,12 @@ const Certifications = () => {
                   <div className="p-6">
                     {/* Icon & Badge */}
                     <div className="flex items-start justify-between mb-4">
-                      <motion.div
-                        whileHover={{ rotate: 360, scale: 1.1 }}
-                        transition={{ duration: 0.6 }}
-                        className="text-4xl"
-                      >
+                      <div className="text-4xl">
                         {cert.icon}
-                      </motion.div>
-                      <motion.div
-                        whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.2 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-3xl"
-                      >
+                      </div>
+                      <div className="text-3xl">
                         {cert.badge}
-                      </motion.div>
+                      </div>
                     </div>
 
                   {/* Title */}
@@ -282,31 +274,7 @@ const Certifications = () => {
           </div>
         </motion.div>
 
-        {/* Stats Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
-          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
-          {[
-            { label: "Total Certifications", value: certifications.length, icon: <FaCertificate /> },
-            { label: "Cloud Certifications", value: certifications.filter(c => c.category === "Cloud").length, icon: <FaTrophy /> },
-            { label: "Development Courses", value: certifications.filter(c => c.category === "Development").length, icon: <FaAward /> },
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white text-center shadow-lg"
-            >
-              <div className="text-4xl mb-2 flex justify-center">
-                {stat.icon}
-              </div>
-              <div className="text-4xl font-bold mb-2">{stat.value}</div>
-              <div className="text-sm opacity-90">{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
+  {/* No stats section here. Certifications grid ends above. */}
       </div>
     </section>
   );

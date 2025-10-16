@@ -128,15 +128,11 @@ const Experience = () => {
               <div className="relative backdrop-blur-md bg-white/80 dark:bg-gray-800/80 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 md:ml-8">
                 <div className="flex items-start gap-4">
                   {/* Icon Container */}
-                  <motion.div 
-                    className="flex-shrink-0"
-                    whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className={`p-4 rounded-xl bg-gradient-to-br ${exp.color} shadow-lg`}>
-                      <FaBriefcase className="text-2xl text-white" />
-                    </div>
-                  </motion.div>
+                        <div className="flex-shrink-0">
+                          <div className={`p-4 rounded-xl bg-gradient-to-br ${exp.color} shadow-lg`}>
+                            <FaBriefcase className="text-2xl text-white" />
+                          </div>
+                        </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">

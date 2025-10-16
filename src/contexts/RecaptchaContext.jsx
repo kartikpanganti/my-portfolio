@@ -17,14 +17,7 @@ export const RecaptchaProvider = ({ children }) => {
 
   // Debug logging for environment variables (only in actual development)
   useEffect(() => {
-    if (import.meta.env.DEV) {
-      console.log('reCAPTCHA Environment Check:', {
-        RECAPTCHA_SITE_KEY: RECAPTCHA_SITE_KEY ? `${RECAPTCHA_SITE_KEY.substring(0, 10)}...` : 'MISSING',
-        hasKey: !!RECAPTCHA_SITE_KEY,
-        env: import.meta.env.MODE,
-        allViteEnvs: Object.keys(import.meta.env).filter(key => key.startsWith('VITE_'))
-      });
-    }
+    // Removed debug log
   }, [RECAPTCHA_SITE_KEY]);
 
   // Function to hide/show reCAPTCHA badge
@@ -46,16 +39,12 @@ export const RecaptchaProvider = ({ children }) => {
       return;
     }
 
-    if (import.meta.env.DEV) {
-      console.log('reCAPTCHA: Loading script...');
-    }
+    // Removed debug log
 
     // Check if script is already loaded
     const existingScript = document.querySelector(`script[src^="https://www.google.com/recaptcha/enterprise.js"]`);
     if (existingScript) {
-      if (import.meta.env.DEV) {
-        console.log('reCAPTCHA: Script already exists, setting loaded state');
-      }
+      // Removed debug log
       setRecaptchaLoaded(true);
       // Hide badge initially
       setTimeout(() => toggleRecaptchaBadge(false), 100);
@@ -67,9 +56,7 @@ export const RecaptchaProvider = ({ children }) => {
     script.async = true;
     script.defer = true;
     script.onload = () => {
-      if (import.meta.env.DEV) {
-        console.log('reCAPTCHA: Script loaded successfully');
-      }
+      // Removed debug log
       setRecaptchaLoaded(true);
       // Hide badge initially after script loads
       setTimeout(() => toggleRecaptchaBadge(false), 100);
@@ -79,9 +66,7 @@ export const RecaptchaProvider = ({ children }) => {
     };
     document.head.appendChild(script);
 
-    if (import.meta.env.DEV) {
-      console.log('reCAPTCHA: Script element added to document head');
-    }
+    // Removed debug log
 
     return () => {
       // Clean up script and badges on unmount

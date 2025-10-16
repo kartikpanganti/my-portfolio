@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaVideo } from 'react-icons/fa';
 import Texlaire from '../assets/project_cover/texlaire.png';
 import Portfolio from '../assets/project_cover/portfolio.png';
 import { te } from 'date-fns/locale';
@@ -43,7 +43,7 @@ const Projects = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.4,
+        duration: 0.18,
         ease: "easeOut"
       }
     }
@@ -59,7 +59,7 @@ const Projects = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.25 }}
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
@@ -96,48 +96,23 @@ const Projects = () => {
                       alt={project.title}
                       className="w-full h-full object-cover"
                       whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      transition={{ duration: 0.18, ease: "easeOut" }}
                     />
                     
-                    {/* Overlay on hover */}
+                    {/* Overlay on hover (removed buttons) */}
                     <motion.div 
                       initial={{ opacity: 0 }}
                       whileHover={{ opacity: 1 }}
                       className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end p-6"
                     >
-                      <div className="flex gap-4">
-                        <motion.a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-white/30 transition-colors"
-                          title="View Source Code"
-                        >
-                          <FaGithub className="text-xl" />
-                          <span className="text-sm font-medium">Code</span>
-                        </motion.a>
-                        <motion.a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark rounded-lg text-white hover:shadow-lg transition-all"
-                          title="View Live Demo"
-                        >
-                          <FaExternalLinkAlt className="text-sm" />
-                          <span className="text-sm font-medium">Live Demo</span>
-                        </motion.a>
-                      </div>
+                      {/* No buttons here, only overlay effect */}
                     </motion.div>
                     
                     {/* Category Badge */}
                     <motion.div 
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.2 }}
+                      transition={{ delay: index * 0.07 }}
                       className="absolute top-4 right-4"
                     >
                       <span className="px-3 py-1 text-xs font-semibold bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark text-white rounded-full shadow-lg backdrop-blur-sm">
@@ -148,6 +123,38 @@ const Projects = () => {
 
                   {/* Content */}
                   <div className="p-6">
+                    {/* Action Buttons Above Title */}
+                    <div className="flex gap-4 mb-4 justify-center">
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 w-36 justify-center px-4 py-2 bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark rounded-lg text-white hover:scale-105 hover:shadow-lg transition-all duration-200 font-medium"
+                        title="View Live Demo"
+                      >
+                        <FaExternalLinkAlt className="text-sm" />
+                        <span className="text-sm">Live Demo</span>
+                      </a>
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 w-36 justify-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-gray-900 dark:text-white hover:bg-white/30 hover:scale-105 transition-all duration-200 font-medium"
+                        title="View Source Code"
+                      >
+                        <FaGithub className="text-xl" />
+                        <span className="text-sm">Code</span>
+                      </a>
+                      <a
+                        href="#"
+                        className="flex items-center gap-2 w-36 justify-center px-4 py-2 bg-gradient-to-r from-pink-400 to-pink-600 rounded-lg text-white hover:scale-105 hover:shadow-lg transition-all duration-200 font-medium"
+                        title="View Demonstration"
+                      >
+                        <FaVideo className="text-sm" />
+                        <span className="text-sm">Demonstration</span>
+                      </a>
+                    </div>
+
                     <motion.h3 
                       className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary-light group-hover:to-secondary-light dark:group-hover:from-primary-dark dark:group-hover:to-secondary-dark transition-all duration-300"
                     >
@@ -161,17 +168,12 @@ const Projects = () => {
                     {/* Technologies */}
                     <div className="flex flex-wrap gap-2">
                       {project.technologies.map((tech, techIndex) => (
-                        <motion.span
+                        <span
                           key={techIndex}
-                          initial={{ opacity: 0, scale: 0 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: techIndex * 0.1 }}
-                          whileHover={{ scale: 1.1, y: -2 }}
                           className="px-3 py-1 text-xs font-medium bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-600 cursor-default"
                         >
                           {tech}
-                        </motion.span>
+                        </span>
                       ))}
                     </div>
                   </div>

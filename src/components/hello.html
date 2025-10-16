@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Contact Form Submission</title>
+    <style>
+        /* Reset styles */
+        body,
+        table,
+        td,
+        a {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table,
+        td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        /* Responsive styles - Full Width Mobile */
+        @media screen and (max-width: 600px) {
+
+            /* Remove body padding on mobile */
+            body {
+                padding: 0 !important;
+                background: #667eea !important;
+            }
+
+            /* Full width container */
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Header - Full width */
+            .header {
+                padding: 25px 15px !important;
+                border-radius: 0 !important;
+            }
+
+            h1 {
+                font-size: 22px !important;
+                margin: 0 0 8px !important;
+            }
+
+            .header p {
+                font-size: 14px !important;
+            }
+
+            /* Content area */
+            .content {
+                padding: 20px 12px !important;
+            }
+
+            /* Cards - More compact */
+            .card {
+                padding: 15px !important;
+                margin-bottom: 15px !important;
+                border-radius: 12px !important;
+            }
+
+            /* Card headers */
+            h2 {
+                font-size: 17px !important;
+                margin: 0 0 15px !important;
+            }
+
+            .card h2 span {
+                width: 28px !important;
+                height: 28px !important;
+                line-height: 28px !important;
+                font-size: 14px !important;
+                margin-right: 8px !important;
+            }
+
+            /* Card content boxes */
+            .card table td {
+                padding: 12px !important;
+                font-size: 14px !important;
+            }
+
+            .card p {
+                font-size: 14px !important;
+                line-height: 1.5 !important;
+            }
+
+            /* Labels */
+            .card table td p:first-child {
+                font-size: 11px !important;
+            }
+
+            /* Technical Info specific fixes */
+            .tech-info-card {
+                padding: 15px !important;
+            }
+
+            .tech-info-card h2 {
+                font-size: 16px !important;
+                margin: 0 0 12px !important;
+            }
+
+            /* Device info - break long text */
+            .device-info {
+                word-break: break-all !important;
+                font-size: 11px !important;
+                line-height: 1.4 !important;
+                overflow-wrap: break-word !important;
+            }
+
+            /* Split columns (Locale/Timestamp) - Stack vertically */
+            .split-column {
+                width: 100% !important;
+                display: block !important;
+                margin-bottom: 12px !important;
+                padding-bottom: 0 !important;
+            }
+
+            .split-column:last-child {
+                margin-bottom: 0 !important;
+            }
+
+            .split-column table {
+                width: 100% !important;
+            }
+
+            .split-column table td {
+                padding: 12px !important;
+            }
+
+            .split-column p {
+                font-size: 13px !important;
+                margin: 0 !important;
+            }
+
+            .split-column p:first-child {
+                font-size: 11px !important;
+            }
+
+            .split-spacer {
+                display: none !important;
+                height: 0 !important;
+                width: 0 !important;
+            }
+
+            /* Buttons - Full width and compact */
+            .button-container {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            .button-cell {
+                display: block !important;
+                width: 100% !important;
+                padding: 5px 0 !important;
+            }
+
+            .button {
+                display: block !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 14px 20px !important;
+                font-size: 15px !important;
+                border-radius: 35px !important;
+                box-sizing: border-box !important;
+            }
+
+            /* Button description text */
+            table td p strong {
+                font-size: 12px !important;
+            }
+
+            /* Footer - Full width */
+            .footer {
+                padding: 20px 15px !important;
+                border-radius: 0 !important;
+            }
+
+            .footer p {
+                font-size: 13px !important;
+                line-height: 1.5 !important;
+                margin: 0 0 8px !important;
+            }
+
+            .footer p:last-of-type {
+                font-size: 11px !important;
+            }
+        }
+    </style>
+</head>
+
+<body
+    style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px;">
+
+    <!-- Main Container -->
+    <table class="container" width="100%" border="0" cellspacing="0" cellpadding="0"
+        style="max-width: 600px; margin: 0 auto;">
+        <tr>
+            <td>
+                <!-- Header Section -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0; padding: 30px 20px; text-align: center;"
+                    class="header">
+                    <tr>
+                        <td>
+                            <h1
+                                style="color: #ffffff; margin: 0 0 10px; font-size: 28px; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                                New Message Received!
+                            </h1>
+                            <p style="color: rgba(255, 255, 255, 0.9); margin: 0; font-size: 16px; font-weight: 400;">
+                                Someone reached out through your portfolio
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Content Section -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #ffffff;">
+                    <tr>
+                        <td class="content" style="padding: 40px 30px;">
+
+                            <!-- Sender Details Card -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 30px;">
+                                <tr>
+                                    <td>
+                                        <div class="card"
+                                            style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 15px; padding: 25px; border-left: 5px solid #667eea;">
+                                            <h2
+                                                style="color: #2d3748; margin: 0 0 20px; font-size: 20px; font-weight: 700;">
+                                                <span
+                                                    style="background: #667eea; color: white; width: 32px; height: 32px; border-radius: 8px; display: inline-block; text-align: center; line-height: 32px; margin-right: 8px; font-size: 16px; vertical-align: middle;">👤</span>
+                                                <span style="vertical-align: middle;">Sender Details</span>
+                                            </h2>
+
+                                            <!-- Name -->
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                                style="margin-bottom: 15px;">
+                                                <tr>
+                                                    <td
+                                                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                                        <p
+                                                            style="margin: 0 0 5px; color: #718096; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Name</p>
+                                                        <p
+                                                            style="margin: 0; color: #2d3748; font-size: 16px; font-weight: 600; word-break: break-word;">
+                                                            {{from_name}}</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+
+
+                                            <!-- Email -->
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                                style="margin-bottom: 15px;">
+                                                <tr>
+                                                    <td
+                                                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                                        <p
+                                                            style="margin: 0 0 5px; color: #718096; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Email</p>
+                                                        <p style="margin: 0;">
+                                                            <a href="mailto:{{reply_to}}"
+                                                                style="color: #667eea; font-size: 16px; font-weight: 600; text-decoration: none; word-break: break-all;">{{reply_to}}</a>
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                            </table> <!-- Name -->
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                                style="margin-bottom: 15px;">
+                                                <tr>
+                                                    <td
+                                                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                                        <p
+                                                            style="margin: 0 0 5px; color: #718096; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Contact</p>
+                                                        <p
+                                                            style="margin: 0; color: #2d3748; font-size: 16px; font-weight: 600; word-break: break-word;">
+                                                            {{mobile}}</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                            <!-- Subject -->
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td
+                                                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                                        <p
+                                                            style="margin: 0 0 5px; color: #718096; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Subject</p>
+                                                        <p
+                                                            style="margin: 0; color: #2d3748; font-size: 16px; font-weight: 600; word-break: break-word;">
+                                                            {{subject}}</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Message Card -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 30px;">
+                                <tr>
+                                    <td>
+                                        <div class="card"
+                                            style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); border-radius: 15px; padding: 25px; border-left: 5px solid #fdcb6e;">
+                                            <h2
+                                                style="color: #2d3748; margin: 0 0 15px; font-size: 20px; font-weight: 700;">
+                                                <span
+                                                    style="background: #fdcb6e; color: white; width: 32px; height: 32px; border-radius: 8px; display: inline-block; text-align: center; line-height: 32px; margin-right: 8px; font-size: 16px; vertical-align: middle;">💬</span>
+                                                <span style="vertical-align: middle;">Message</span>
+                                            </h2>
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td
+                                                        style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                                        <p
+                                                            style="margin: 0; color: #2d3748; font-size: 15px; line-height: 1.8; white-space: pre-wrap; word-break: break-word;">
+                                                            {{message}}</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Technical Info Card -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 30px;">
+                                <tr>
+                                    <td>
+                                        <div class="card tech-info-card"
+                                            style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 15px; padding: 25px; border-left: 5px solid #81e6d9;">
+                                            <h2
+                                                style="color: #2d3748; margin: 0 0 20px; font-size: 20px; font-weight: 700;">
+                                                <span
+                                                    style="background: #81e6d9; color: white; width: 32px; height: 32px; border-radius: 8px; display: inline-block; text-align: center; line-height: 32px; margin-right: 8px; font-size: 16px; vertical-align: middle;">🔧</span>
+                                                <span style="vertical-align: middle;">Technical Info</span>
+                                            </h2>
+
+                                            <!-- Device -->
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                                style="margin-bottom: 15px;">
+                                                <tr>
+                                                    <td
+                                                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                                        <p
+                                                            style="margin: 0 0 5px; color: #718096; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Device</p>
+                                                        <p class="device-info"
+                                                            style="margin: 0; color: #4a5568; font-size: 13px; line-height: 1.6; word-break: break-all;">
+                                                            {{device_info}}</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                            <!-- Locale & Timestamp (Responsive Grid) -->
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td class="split-column" width="48%" valign="top">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td
+                                                                    style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                                                    <p
+                                                                        style="margin: 0 0 5px; color: #718096; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                                        Locale</p>
+                                                                    <p
+                                                                        style="margin: 0; color: #2d3748; font-size: 14px; font-weight: 600;">
+                                                                        {{locale}}</p>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td class="split-spacer" width="4%"></td>
+                                                    <td class="split-column" width="48%" valign="top">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td
+                                                                    style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                                                    <p
+                                                                        style="margin: 0 0 5px; color: #718096; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                                        Sent At</p>
+                                                                    <p
+                                                                        style="margin: 0; color: #2d3748; font-size: 14px; font-weight: 600; word-break: break-word;">
+                                                                        {{timestamp}}</p>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Reply Buttons -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="center">
+                                        <table class="button-container" border="0" cellspacing="0" cellpadding="0"
+                                            style="display: inline-block;">
+                                            <tr>
+                                                <!-- Quick Reply Button -->
+                                                <td class="button-cell" style="padding: 0 10px;">
+                                                    <a href="mailto:{{reply_to}}?subject=Re: {{subject}}" class="button"
+                                                        style="display: inline-block; background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; text-decoration: none; padding: 16px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; box-shadow: 0 10px 25px rgba(72, 187, 120, 0.4); text-align: center;">
+                                                        ⚡ Quick Reply
+                                                    </a>
+                                                </td>
+
+                                                <!-- Detailed Reply Button -->
+                                                <td class="button-cell" style="padding: 0 10px;">
+                                                    <a href="mailto:{{reply_to}}?subject=Re: {{subject}}&body=Hi {{from_name}},%0D%0A%0D%0AThank you for reaching out through my portfolio contact form!%0D%0A%0D%0AYour Message:%0D%0A{{message}}%0D%0A%0D%0A---%0D%0AContact Details:%0D%0AName: {{from_name}}%0D%0AEmail: {{reply_to}}%0D%0ASubject: {{subject}}%0D%0AContacted via: {{contacted_via}}%0D%0AWebsite: {{portfolio_url}}%0D%0A---%0D%0A%0D%0A"
+                                                        class="button"
+                                                        style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; padding: 16px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4); text-align: center;">
+                                                        💼 Reply with Details
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- Button Description -->
+                                <tr>
+                                    <td align="center" style="padding-top: 20px;">
+                                        <p
+                                            style="margin: 0; color: #718096; font-size: 13px; line-height: 1.6; max-width: 500px; padding: 0 20px;">
+                                            <strong style="color: #48bb78;">Quick Reply</strong> - Opens a blank
+                                            email<br>
+                                            <strong style="color: #667eea;">Reply with Details</strong> - Includes name,
+                                            email, message & website source
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Footer Section -->
+                <table class="footer" width="100%" border="0" cellspacing="0" cellpadding="0"
+                    style="background: #2d3748; border-radius: 0 0 20px 20px; padding: 30px; text-align: center;">
+                    <tr>
+                        <td>
+                            <p style="color: #a0aec0; margin: 0 0 10px; font-size: 14px; line-height: 1.6;">
+                                This message was sent via your portfolio contact form
+                            </p>
+                            <p style="color: #718096; margin: 0; font-size: 12px;">
+                                © 2025 Your Portfolio. All rights reserved.
+                            </p>
+                            <table border="0" cellspacing="0" cellpadding="0" style="margin: 20px auto 0;">
+                                <tr>
+                                    <td>
+                                        <div
+                                            style="width: 40px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent);">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

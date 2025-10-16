@@ -119,7 +119,6 @@ const About = () => {
                   {/* Icon */}
                   <motion.div 
                     className="mb-4"
-                    whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.2 }}
                     transition={{ duration: 0.5 }}
                   >
                     <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${item.color} shadow-lg`}>
@@ -172,7 +171,6 @@ const About = () => {
                     <div className="relative flex items-center gap-3 px-6 py-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg">
                       <motion.div 
                         className="text-2xl"
-                        whileHover={{ rotate: 360 }}
                         transition={{ duration: 0.6 }}
                       >
                         {item.icon}

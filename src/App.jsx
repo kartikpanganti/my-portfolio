@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
-import { FaGithub, FaLinkedin } from 'react-icons/fa'
-import { FaXTwitter } from 'react-icons/fa6'
-import { MdEmail } from 'react-icons/md'
+// Removed unused icon imports
 import { RecaptchaProvider } from './contexts/RecaptchaContext'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -15,13 +13,18 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import './App.css'
 
-import AnimatedBackground from './components/AnimatedBackground'
+// Removed unused AnimatedBackground import
 
 function App() {
-  // Set dark mode as default
+  // Apply theme from localStorage on mount
   useEffect(() => {
-    document.documentElement.classList.add('dark')
-  }, [])
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
 
   return (
     <RecaptchaProvider>

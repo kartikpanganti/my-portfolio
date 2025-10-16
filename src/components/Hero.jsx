@@ -34,14 +34,10 @@ const VideoBackground = () => {
   // Ensure both videos are loaded and play on mount
   useEffect(() => {
     if (darkVideoRef.current) {
-      darkVideoRef.current.play().catch(error => {
-        console.log("Dark video autoplay prevented:", error);
-      });
+      darkVideoRef.current.play().catch(() => {});
     }
     if (lightVideoRef.current) {
-      lightVideoRef.current.play().catch(error => {
-        console.log("Light video autoplay prevented:", error);
-      });
+      lightVideoRef.current.play().catch(() => {});
     }
   }, []);
 
@@ -132,7 +128,7 @@ const Hero = () => {
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.4
+        duration: 0.2 // reduced from 0.4
       },
     },
   };
@@ -143,7 +139,7 @@ const Hero = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.3,
+        duration: 0.15, // reduced from 0.3
         ease: "easeOut",
       },
     },
@@ -350,7 +346,7 @@ const Hero = () => {
                     opacity: [0.5, 0.7, 0.5],
                   }}
                   transition={{
-                    duration: 4,
+                    duration: 2, // reduced from 4
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
@@ -378,10 +374,9 @@ const Hero = () => {
                     opacity: [0.6, 0.8, 0.6],
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 1.5, // reduced from 3
                     repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1
+                    ease: "easeInOut"
                   }}
                 >
                   <div className="w-full h-full rounded-full bg-gradient-to-r from-primary-light/20 to-secondary-light/20 dark:from-primary-dark/20 dark:to-secondary-dark/20 blur-lg" />
@@ -394,7 +389,7 @@ const Hero = () => {
                     opacity: [0.6, 0.8, 0.6],
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 1.5, // reduced from 3
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
@@ -407,15 +402,7 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute inset-x-0 bottom-0 w-full flex justify-center pb-2 sm:pb-6 md:pb-8 z-20">
-        <div className="flex flex-col items-center opacity-75">
-          <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">Scroll to explore</span>
-          <div className="w-4 h-6 sm:w-6 sm:h-10 border-2 border-gray-400 dark:border-gray-600 rounded-full flex justify-center">
-            <div className="w-1 sm:w-1.5 h-2 sm:h-3 bg-gray-400 dark:bg-gray-600 rounded-full mt-2 animate-pulse" />
-          </div>
-        </div>
-      </div>
+      {/* Removed scroll indicator for cleaner UI */}
       
       {/* Bottom gradient blend for smooth section transition */}
       <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 md:h-48 bg-gradient-to-b from-transparent via-white/50 to-white dark:from-transparent dark:via-gray-900/50 dark:to-gray-900 z-10 pointer-events-none" />

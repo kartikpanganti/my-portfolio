@@ -66,7 +66,6 @@ const Education = () => {
                   {/* Icon Container */}
                   <motion.div 
                     className="flex-shrink-0"
-                    whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
                     transition={{ duration: 0.3 }}
                   >
                     <div className="p-5 rounded-2xl bg-gradient-to-br from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark shadow-lg">
