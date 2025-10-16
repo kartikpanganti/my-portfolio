@@ -16,13 +16,20 @@ import './App.css'
 // Removed unused AnimatedBackground import
 
 function App() {
-  // Apply theme from localStorage on mount
+  // Apply theme based on localStorage or system preference on mount
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme');
     if (storedTheme === 'light') {
       document.documentElement.classList.remove('dark');
-    } else {
+    } else if (storedTheme === 'dark') {
       document.documentElement.classList.add('dark');
+    } else {
+      // No manual override, use system preference
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
     }
   }, []);
 

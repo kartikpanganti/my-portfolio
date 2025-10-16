@@ -13,8 +13,11 @@ const Navbar = () => {
     const storedTheme = localStorage.getItem('theme');
     if (storedTheme === 'light') return false;
     if (storedTheme === 'dark') return true;
-    // Default to dark
-    return true;
+    // No manual override, use system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return true;
+    }
+    return false;
   });
 
   const navItems = [
@@ -53,7 +56,7 @@ const Navbar = () => {
       localStorage.setItem('theme', 'light');
     }
   };
-  // On mount, apply theme from localStorage
+  // On mount and when isDark changes, apply theme
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
@@ -61,6 +64,19 @@ const Navbar = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [isDark]);
+
+  // Listen for system theme changes if no manual override
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (!storedTheme) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = (e) => {
+        setIsDark(e.matches);
+      };
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+  }, []);
 
   // Close mobile menu when clicking outside
   useEffect(() => {
