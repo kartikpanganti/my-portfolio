@@ -17,7 +17,8 @@ const Contact = () => {
     email: '',
     mobile: '',
     subject: '',
-    message: ''
+    message: '',
+    countryCode: '', // Store country code from phone input
   });
   const [errors, setErrors] = useState({});
 
@@ -400,9 +401,24 @@ const Contact = () => {
   // Handle phone input change
   const handlePhoneChange = (value, country) => {
     // value already contains the full number with country code
+    // Always format value to start with +countryCode, never duplicate country code
+    let local = value;
+    if (country) {
+      // Escape country.dialCode for RegExp
+      const escapedDialCode = country.dialCode.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
+      // Remove any existing country code (with or without plus) from the start
+      const dialCodeRegex = new RegExp(`^\\+?${escapedDialCode}`);
+      local = local.replace(dialCodeRegex, '');
+      local = local.replace(/^0+/, ''); // Remove leading zeros
+      // Only digits for local number
+      local = local.replace(/\D/g, '');
+      // Prepend correct country code
+      local = local ? `+${country.dialCode}${local}` : `+${country.dialCode}`;
+    }
     setFormData({
       ...formData,
-      mobile: value,
+      mobile: local,
+      countryCode: country ? `+${country.dialCode}` : '',
     });
     
     // Basic validation as user types
@@ -560,15 +576,26 @@ const Contact = () => {
       // Get current website URL
       const portfolioUrl = window.location.origin;
 
-      // Mobile number is already formatted with country code by react-phone-input-2
-      // The library already adds the + sign, so we don't need to add it again
-      const fullMobileNumber = formData.mobile.trim() || '';
+        // Use countryCode from phone input and extract local number
+        let rawMobile = formData.mobile.trim().replace(/\s|-/g, '') || '';
+        let countryCode = formData.countryCode || '';
+        let localNumber = '';
+        // Remove country code from start, always send only local number
+        if (countryCode && rawMobile.startsWith(countryCode)) {
+          localNumber = rawMobile.slice(countryCode.length);
+        } else if (countryCode && rawMobile.startsWith(countryCode.replace('+', ''))) {
+          localNumber = rawMobile.slice(countryCode.replace('+', '').length);
+        } else {
+          localNumber = rawMobile;
+        }
 
       // Combine form data with technical info and website URL
+      // Send countrycode and mobile as separate fields for email template
       const templateParams = {
         from_name: formData.name.trim(),
         reply_to: formData.email.trim(),
-        mobile: fullMobileNumber,
+  countrycode: countryCode,
+  mobile: localNumber,
         subject: formData.subject.trim(),
         message: formData.message.trim(),
         portfolio_url: portfolioUrl,
@@ -585,7 +612,7 @@ const Contact = () => {
 
       showStatus(false, '✅ Message sent successfully! I\'ll get back to you soon.');
       
-      // Reset form
+      // Reset form and errors
       setFormData({
         name: '',
         email: '',
@@ -595,12 +622,21 @@ const Contact = () => {
       });
       setErrors({});
     } catch (error) {
-      console.error('Form submission error:', error);
-      if (error.message.includes('reCAPTCHA')) {
-        showStatus(true, '❌ Security verification failed. Please refresh and try again.');
-      } else {
-        showStatus(true, '❌ Failed to send message. Please try again or contact me directly.');
+      // Improved error handling for null or non-Error objects
+      let errorMsg = '❌ Failed to send message. Please try again or contact me directly.';
+      if (error && typeof error === 'object' && error.message) {
+        if (error.message.includes('reCAPTCHA')) {
+          errorMsg = '❌ Security verification failed. Please refresh and try again.';
+        } else {
+          errorMsg = `❌ ${error.message}`;
+        }
+      } else if (typeof error === 'string') {
+        errorMsg = `❌ ${error}`;
+      } else if (error === null) {
+        errorMsg = '❌ An unknown error occurred (null). Please try again.';
       }
+      console.error('Form submission error:', error);
+      showStatus(true, errorMsg);
     } finally {
       setLoading(false);
     }
@@ -616,7 +652,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-8 relative overflow-hidden">
+  <section id="contact" className="py-8 relative overflow-hidden" style={{ willChange: 'opacity, transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-secondary-light/5 to-transparent dark:via-secondary-dark/5" />
       
