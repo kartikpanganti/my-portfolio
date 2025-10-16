@@ -2,31 +2,22 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { FaGithub, FaLinkedin, FaShare } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere, MeshDistortMaterial, Float, Stars } from '@react-three/drei';
 import { useRef, useState, useEffect } from 'react';
-import * as THREE from 'three';
 import RESUMEE from '../assets/RESUME.pdf';
 import profileImage from '../assets/profile.png';
 
-// Dynamic animated background compatible with light/dark modes
-const DynamicBackground = () => {
-  const [isMobileDevice, setIsMobileDevice] = useState(false);
+// Video background component with theme-aware overlay
+const VideoBackground = () => {
   const [isDark, setIsDark] = useState(false);
+  const darkVideoRef = useRef(null);
+  const lightVideoRef = useRef(null);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobileDevice(window.innerWidth < 768);
-    };
-    
     const checkTheme = () => {
       setIsDark(document.documentElement.classList.contains('dark'));
     };
     
-    checkMobile();
     checkTheme();
-    
-    window.addEventListener('resize', checkMobile);
     
     // Listen for theme changes
     const observer = new MutationObserver(checkTheme);
@@ -36,267 +27,69 @@ const DynamicBackground = () => {
     });
     
     return () => {
-      window.removeEventListener('resize', checkMobile);
       observer.disconnect();
     };
   }, []);
 
-  // Animated particle ring system
-  const ParticleRing = ({ radius, count, color, speed, direction = 1 }) => {
-    const meshRef = useRef();
-    
-    useFrame((state) => {
-      if (meshRef.current) {
-        meshRef.current.rotation.y = state.clock.getElapsedTime() * speed * direction;
-        meshRef.current.rotation.z = Math.sin(state.clock.getElapsedTime() * 0.3) * 0.1;
-      }
-    });
-
-    const particles = Array.from({ length: count }, (_, i) => {
-      const angle = (i / count) * Math.PI * 2;
-      const x = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
-      const y = Math.sin(angle * 3) * 0.2; // Add vertical wave
-      return { x, y, z };
-    });
-
-    return (
-      <group ref={meshRef}>
-        {particles.map((pos, i) => (
-          <Float key={i} speed={1 + Math.random()} rotationIntensity={0.2} floatIntensity={0.3}>
-            <Sphere args={[0.08, 16, 16]} position={[pos.x, pos.y, pos.z]}>
-              <meshStandardMaterial
-                color={color}
-                emissive={color}
-                emissiveIntensity={isDark ? 0.6 : 0.8}
-                metalness={isDark ? 0.8 : 0.9}
-                roughness={isDark ? 0.2 : 0.1}
-                transparent
-                opacity={isDark ? 0.9 : 1.0}
-              />
-            </Sphere>
-          </Float>
-        ))}
-      </group>
-    );
-  };
-
-  // Pulsating energy core
-  const EnergyCore = () => {
-    const meshRef = useRef();
-    
-    useFrame((state) => {
-      if (meshRef.current) {
-        const pulse = Math.sin(state.clock.getElapsedTime() * 2) * 0.2 + 1;
-        meshRef.current.scale.setScalar(pulse);
-        meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.1;
-        meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
-      }
-    });
-
-    return (
-      <Float speed={2} rotationIntensity={0.3} floatIntensity={1}>
-        <group ref={meshRef}>
-          <Sphere args={[0.8, 64, 64]}>
-            <MeshDistortMaterial
-              color={isDark ? "#8B5CF6" : "#6366F1"}
-              distort={0.4}
-              speed={2}
-              roughness={0.1}
-              metalness={0.9}
-              emissive={isDark ? "#8B5CF6" : "#6366F1"}
-              emissiveIntensity={isDark ? 0.4 : 0.3}
-              transparent
-              opacity={isDark ? 0.8 : 0.7}
-            />
-          </Sphere>
-        </group>
-      </Float>
-    );
-  };
-
-  // Orbiting elements with trails
-  const OrbitingElement = ({ distance, speed, color, size, angle = 0 }) => {
-    const meshRef = useRef();
-    
-    useFrame((state) => {
-      if (meshRef.current) {
-        const time = state.clock.getElapsedTime() * speed + angle;
-        meshRef.current.position.x = Math.cos(time) * distance;
-        meshRef.current.position.z = Math.sin(time) * distance;
-        meshRef.current.position.y = Math.sin(time * 2) * 0.5;
-        meshRef.current.rotation.x = time;
-        meshRef.current.rotation.y = time * 1.5;
-      }
-    });
-
-    return (
-      <mesh ref={meshRef}>
-        <Sphere args={[size, 32, 32]}>
-          <meshStandardMaterial
-            color={color}
-            emissive={color}
-            emissiveIntensity={isDark ? 0.7 : 0.5}
-            metalness={1}
-            roughness={0}
-            transparent
-            opacity={isDark ? 0.9 : 0.8}
-          />
-        </Sphere>
-      </mesh>
-    );
-  };
+  // Ensure both videos are loaded and play on mount
+  useEffect(() => {
+    if (darkVideoRef.current) {
+      darkVideoRef.current.play().catch(error => {
+        console.log("Dark video autoplay prevented:", error);
+      });
+    }
+    if (lightVideoRef.current) {
+      lightVideoRef.current.play().catch(error => {
+        console.log("Light video autoplay prevented:", error);
+      });
+    }
+  }, []);
 
   return (
-    <Canvas 
-      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
-      camera={{ position: [0, 0, 12], fov: 60 }}
-      dpr={[1, isMobileDevice ? 1.5 : 2]}
-    >
-      {/* Dynamic starfield */}
-      <Stars 
-        radius={150} 
-        depth={80} 
-        count={isMobileDevice ? 1500 : 2500} 
-        factor={isDark ? 6 : 4} 
-        saturation={0} 
-        fade 
-        speed={isDark ? 1 : 0.5}
-      />
+    <div className="absolute inset-0 overflow-hidden">
+      {/* Dark mode video (using LightBackround.mp4 - to be renamed as DarkThemeBackround.mp4) */}
+      <video
+        ref={darkVideoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out"
+        style={{ 
+          filter: 'brightness(0.7) contrast(1.15) saturate(1.1)',
+          opacity: isDark ? 1 : 0,
+          pointerEvents: 'none',
+        }}
+      >
+        <source src="/LightBackround.mp4" type="video/mp4" />
+      </video>
+
+      {/* Light mode video (using backroundvideo.mp4 - to be renamed as LightThemeBackround.mp4) */}
+      <video
+        ref={lightVideoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out"
+        style={{ 
+          filter: 'brightness(0.95) contrast(1.05) saturate(1.05)',
+          opacity: isDark ? 0 : 1,
+          pointerEvents: 'none',
+        }}
+      >
+        <source src="/backroundvideo.mp4" type="video/mp4" />
+      </video>
       
-      {/* Adaptive lighting */}
-      <ambientLight intensity={isDark ? 0.3 : 0.5} />
-      <directionalLight 
-        position={[10, 10, 5]} 
-        intensity={isDark ? 0.6 : 0.8} 
-        color={isDark ? "#E5E7EB" : "#F9FAFB"}
-      />
-      <pointLight 
-        position={[-8, -8, -8]} 
-        color={isDark ? "#8B5CF6" : "#6366F1"} 
-        intensity={isDark ? 0.6 : 0.4} 
-      />
-      <pointLight 
-        position={[8, -8, -8]} 
-        color={isDark ? "#EC4899" : "#F472B6"} 
-        intensity={isDark ? 0.6 : 0.4} 
-      />
-      
-      {/* Central energy core */}
-      <EnergyCore />
-      
-      {/* Multiple particle rings with different speeds and directions */}
-      {!isMobileDevice && (
-        <>
-          <ParticleRing 
-            radius={2.5} 
-            count={20} 
-            color={isDark ? "#8B5CF6" : "#4F46E5"} 
-            speed={0.2} 
-            direction={1} 
-          />
-          <ParticleRing 
-            radius={3.5} 
-            count={16} 
-            color={isDark ? "#EC4899" : "#E11D48"} 
-            speed={0.15} 
-            direction={-1} 
-          />
-          <ParticleRing 
-            radius={4.2} 
-            count={12} 
-            color={isDark ? "#3B82F6" : "#2563EB"} 
-            speed={0.1} 
-            direction={1} 
-          />
-        </>
-      )}
-      
-      {/* Mobile simplified rings */}
-      {isMobileDevice && (
-        <>
-          <ParticleRing 
-            radius={3} 
-            count={12} 
-            color={isDark ? "#8B5CF6" : "#4F46E5"} 
-            speed={0.2} 
-            direction={1} 
-          />
-          <ParticleRing 
-            radius={4} 
-            count={8} 
-            color={isDark ? "#EC4899" : "#F472B6"} 
-            speed={0.15} 
-            direction={-1} 
-          />
-        </>
-      )}
-      
-      {/* Orbiting elements */}
-      <OrbitingElement 
-        distance={5} 
-        speed={0.3} 
-        color={isDark ? "#EC4899" : "#F472B6"} 
-        size={0.15} 
-        angle={0} 
-      />
-      <OrbitingElement 
-        distance={6} 
-        speed={0.25} 
-        color={isDark ? "#3B82F6" : "#60A5FA"} 
-        size={0.12} 
-        angle={Math.PI} 
-      />
-      <OrbitingElement 
-        distance={4.5} 
-        speed={0.35} 
-        color={isDark ? "#10B981" : "#34D399"} 
-        size={0.1} 
-        angle={Math.PI / 2} 
-      />
-      
-      {/* Floating accent elements */}
-      <Float speed={1.5} rotationIntensity={2} floatIntensity={2}>
-        <Sphere args={[0.3, 32, 32]} position={[-6, 2, -3]}>
-          <meshStandardMaterial
-            color={isDark ? "#F59E0B" : "#FCD34D"}
-            emissive={isDark ? "#F59E0B" : "#FCD34D"}
-            emissiveIntensity={isDark ? 0.5 : 0.3}
-            metalness={0.8}
-            roughness={0.2}
-            transparent
-            opacity={0.8}
-          />
-        </Sphere>
-      </Float>
-      
-      <Float speed={1.8} rotationIntensity={1.5} floatIntensity={1.8}>
-        <Sphere args={[0.25, 32, 32]} position={[5, -2.5, -2]}>
-          <meshStandardMaterial
-            color={isDark ? "#EF4444" : "#F87171"}
-            emissive={isDark ? "#EF4444" : "#F87171"}
-            emissiveIntensity={isDark ? 0.5 : 0.3}
-            metalness={0.8}
-            roughness={0.2}
-            transparent
-            opacity={0.8}
-          />
-        </Sphere>
-      </Float>
-      
-      <OrbitControls 
-        enableZoom={false} 
-        autoRotate 
-        autoRotateSpeed={isDark ? 0.4 : 0.2}
-        enablePan={false}
-      />
-    </Canvas>
+      {/* No overlays - 100% background video visibility */}
+    </div>
   );
 };
 
 const Hero = () => {
   const containerRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   // Detect mobile devices
   useEffect(() => {
@@ -307,6 +100,27 @@ const Hero = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Detect dark mode
+  useEffect(() => {
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+    
+    checkTheme();
+    
+    // Listen for theme changes
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    });
+    
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 300], [0, -50], { 
     clamp: true // Prevents over-scrolling
@@ -339,15 +153,15 @@ const Hero = () => {
     <section 
       id="hero"
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-background-light to-gray-50 dark:from-background-dark dark:to-gray-900"
+      className="relative min-h-[120vh] md:min-h-[130vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-background-light to-gray-50 dark:from-background-dark dark:to-gray-900 pb-20 md:pb-32"
     >
-      {/* Dynamic 3D background for all devices */}
-      <div className="absolute inset-0 opacity-50 dark:opacity-40">
-        <DynamicBackground />
+      {/* Video background for all devices */}
+      <div className="absolute inset-0">
+        <VideoBackground />
       </div>
       
-      {/* Enhanced gradient background with theme awareness */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/8 to-pink-500/10 dark:from-indigo-500/15 dark:via-purple-500/12 dark:to-pink-500/15" />
+      {/* Bottom fade effect to separate from next section */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 md:h-40 bg-gradient-to-t from-gray-50 dark:from-gray-900 to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 md:py-24 lg:py-32 relative z-10">
         <motion.div 
@@ -362,17 +176,41 @@ const Hero = () => {
           >
             <motion.h1 
               variants={itemVariants}
-              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-gray-900 dark:text-white mb-3 sm:mb-6"
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold mb-3 sm:mb-6"
+              style={{
+                color: isDark ? '#ffffff' : '#ffffff',
+                textShadow: isDark 
+                  ? '0 0 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.8)'
+                  : '1px 1px 2px rgba(0, 0, 0, 0.5), 0 0 4px rgba(0, 0, 0, 0.4), 2px 2px 8px rgba(0, 0, 0, 0.3)',
+                WebkitTextStroke: isDark ? '0' : '1px rgba(0, 0, 0, 0.3)',
+                fontWeight: '900',
+              }}
             >
               Hi, I'm{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark">
+              <span className={isDark ? "text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark" : "text-black"}
+                style={{
+                  filter: isDark 
+                    ? 'drop-shadow(0 0 15px rgba(99, 102, 241, 0.8)) drop-shadow(0 0 30px rgba(139, 92, 246, 0.6))'
+                    : 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.6)) drop-shadow(0 0 15px rgba(99, 102, 241, 0.4))',
+                  WebkitTextStroke: isDark ? '0' : '0',
+                  textShadow: isDark ? 'none' : '0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(99, 102, 241, 0.3)',
+                }}
+              >
                 Kartik Panganti
               </span>
             </motion.h1>
 
             <motion.div 
               variants={itemVariants}
-              className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-4 sm:mb-6 h-12 sm:h-16 font-heading"
+              className="text-lg sm:text-xl md:text-2xl mb-4 sm:mb-6 h-12 sm:h-16 font-heading font-bold"
+              style={{
+                color: isDark ? '#e5e7eb' : '#ffffff',
+                textShadow: isDark 
+                  ? '0 0 15px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.8)'
+                  : '1px 1px 2px rgba(0, 0, 0, 0.5), 0 0 4px rgba(0, 0, 0, 0.4), 2px 2px 8px rgba(0, 0, 0, 0.3)',
+                WebkitTextStroke: isDark ? '0' : '0.75px rgba(0, 0, 0, 0.3)',
+                fontWeight: '800',
+              }}
             >
               <TypeAnimation
                 sequence={[
@@ -393,7 +231,15 @@ const Hero = () => {
 
             <motion.p 
               variants={itemVariants}
-              className="text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 text-base sm:text-lg max-w-lg"
+              className="mb-6 sm:mb-8 text-base sm:text-lg max-w-lg font-semibold"
+              style={{
+                color: isDark ? '#d1d5db' : '#ffffff',
+                textShadow: isDark 
+                  ? '0 0 12px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.8)'
+                  : '0.5px 0.5px 1.5px rgba(0, 0, 0, 0.5), 0 0 3px rgba(0, 0, 0, 0.4), 1px 1px 4px rgba(0, 0, 0, 0.3)',
+                WebkitTextStroke: isDark ? '0' : '0.5px rgba(0, 0, 0, 0.25)',
+                fontWeight: '700',
+              }}
             >
               Recent CSE graduate with a foundation in web development and a growing interest in AI. I enjoy turning ideas into projects and continuously improving my skills
             </motion.p>
@@ -406,7 +252,12 @@ const Hero = () => {
                 href="#contact"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-4 sm:px-8 py-2.5 sm:py-4 text-sm sm:text-base bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark text-white rounded-full font-medium shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="px-4 sm:px-8 py-2.5 sm:py-4 text-sm sm:text-base bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark text-white rounded-full font-bold shadow-2xl hover:shadow-3xl transition-all duration-300"
+                style={{
+                  boxShadow: isDark 
+                    ? '0 4px 25px rgba(99, 102, 241, 0.6), 0 0 40px rgba(139, 92, 246, 0.4)'
+                    : '0 4px 20px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3)',
+                }}
               >
                 Let's Connect
               </motion.a>
@@ -414,7 +265,19 @@ const Hero = () => {
                 href={RESUMEE} download="Kartik_Panaganti_Resume.pdf"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-4 sm:px-8 py-2.5 sm:py-4 text-sm sm:text-base border-2 border-primary-light dark:border-primary-dark text-primary-light dark:text-primary-dark rounded-full font-medium hover:bg-primary-light/5 dark:hover:bg-primary-dark/5 transition-colors duration-300"
+                className="px-4 sm:px-8 py-2.5 sm:py-4 text-sm sm:text-base border-2 rounded-full font-bold transition-all duration-300"
+                style={{
+                  borderColor: isDark ? '#818CF8' : '#4F46E5',
+                  color: isDark ? '#ffffff' : '#1f2937',
+                  backgroundColor: isDark ? 'rgba(55, 65, 81, 0.8)' : 'rgba(255, 255, 255, 0.9)',
+                  boxShadow: isDark 
+                    ? '0 2px 15px rgba(129, 140, 248, 0.4), 0 0 30px rgba(129, 140, 248, 0.2)'
+                    : '0 2px 15px rgba(79, 70, 229, 0.4), 0 0 20px rgba(79, 70, 229, 0.2)',
+                  backdropFilter: 'blur(8px)',
+                  textShadow: isDark 
+                    ? '0 0 10px rgba(0, 0, 0, 0.5)'
+                    : 'none',
+                }}
               >
                 My Resume
               </motion.a>
@@ -456,7 +319,14 @@ const Hero = () => {
                   onClick={social.onClick || undefined}
                   whileHover={{ scale: 1.2, rotate: 5 }}
                   whileTap={{ scale: 0.9 }}
-                  className="text-gray-600 dark:text-gray-400 hover:text-primary-light dark:hover:text-primary-dark transition-colors duration-300"
+                  className="transition-colors duration-300"
+                  style={{
+                    color: isDark ? '#d1d5db' : '#ffffff',
+                    filter: isDark 
+                      ? 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 15px rgba(0, 0, 0, 0.7))'
+                      : 'drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 4px rgba(0, 0, 0, 0.4))',
+                    textShadow: isDark ? 'none' : '0.5px 0.5px 1.5px rgba(0, 0, 0, 0.5)',
+                  }}
                 >
                   <social.icon size={24} className="sm:w-7 sm:h-7" />
                 </motion.a>

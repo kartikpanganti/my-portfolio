@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaTwitter, FaHeart, FaArrowUp, FaShieldAlt } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaHeart, FaArrowUp, FaShieldAlt } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import { useRecaptcha } from '../contexts/RecaptchaContext';
 
 const Footer = () => {
@@ -53,10 +54,10 @@ const Footer = () => {
       color: "from-gray-700 to-gray-900"
     },
     {
-      name: "Twitter",
-      href: "https://twitter.com/kartikpanganti",
-      icon: <FaTwitter />,
-      color: "from-blue-400 to-cyan-500"
+      name: "X",
+      href: "https://x.com/kartikpanganti",
+      icon: <FaXTwitter />,
+      color: "from-gray-700 to-gray-900"
     }
   ];
 
@@ -157,13 +158,13 @@ const Footer = () => {
             <h4 className="text-lg font-bold text-white mb-4">Get In Touch</h4>
             <div className="space-y-3">
               <a
-                href="mailto:karthikpanaganti@gmail.com"
+                href="mailto:kartikpanaganti.contact@gmail.com"
                 className="text-gray-400 hover:text-white transition-colors block"
               >
-                karthikpanaganti@gmail.com
+                kartikpanaganti.contact@gmail.com
               </a>
               <p className="text-gray-400 text-sm">
-                Available for freelance opportunities and collaborations
+               Open to freelance projects, collaborations, and full-time roles. Let’s build something remarkable together! For urgent matters, please include “URGENT” in your subject line.
               </p>
             </div>
           </motion.div>

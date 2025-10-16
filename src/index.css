@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Light mode Hero text colors */
+  --hero-text-primary: #111827;
+  --hero-text-secondary: #1f2937;
+  --hero-text-tertiary: #374151;
+  --button-border: #4F46E5;
+  --button-text: #4F46E5;
+  --social-icon: #374151;
+}
+
+.dark {
+  /* Dark mode Hero text colors */
+  --hero-text-primary: #ffffff;
+  --hero-text-secondary: #d1d5db;
+  --hero-text-tertiary: #9ca3af;
+  --button-border: #818CF8;
+  --button-text: #818CF8;
+  --social-icon: #9ca3af;
+}
+
 html {
   scroll-behavior: smooth;
 }

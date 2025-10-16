@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaTwitter, FaPaperPlane, FaShieldAlt, FaLock } from 'react-icons/fa';
+import { FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaPaperPlane, FaLock } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import emailjs from '@emailjs/browser';
 import { useRecaptcha } from '../contexts/RecaptchaContext';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const Contact = () => {
   const form = useRef();
@@ -12,6 +15,7 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    mobile: '',
     subject: '',
     message: ''
   });
@@ -46,8 +50,348 @@ const Contact = () => {
     }
   }, [RECAPTCHA_SITE_KEY, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY, recaptchaLoaded]);
 
+  // Add scroll behavior fix for country dropdown
+  useEffect(() => {
+    const handleWheel = (e) => {
+      // Find if the target is within a country list
+      const countryList = e.target.closest('.country-list');
+      const scrollableArea = e.target.closest('.divider + div');
+      
+      if (countryList) {
+        // If we're in the country list but not in the scrollable area
+        if (!scrollableArea) {
+          e.preventDefault();
+        } else {
+          // We're in the scrollable area, check if we've reached the boundary
+          const { scrollTop, scrollHeight, clientHeight } = scrollableArea;
+          const isAtTop = scrollTop <= 0;
+          const isAtBottom = scrollTop + clientHeight >= scrollHeight;
+          
+          // If we're at the top and scrolling up, or at the bottom and scrolling down
+          if ((isAtTop && e.deltaY < 0) || (isAtBottom && e.deltaY > 0)) {
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    // Add event listener with passive: false to allow preventDefault
+    document.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      document.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
+
+  // Add custom styles for react-phone-input-2 dark mode
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      /* Base input styling */
+      .react-tel-input .form-control {
+        width: 100% !important;
+        height: 42px !important;
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(4px) !important;
+        border: 1px solid rgb(209, 213, 219) !important;
+        border-radius: 0.5rem !important;
+        color: inherit !important;
+        transition: all 0.3s ease !important;
+        padding: 0.5rem 0.75rem 0.5rem 56px !important; /* Increased padding for flag icon */
+        font-size: 0.875rem !important;
+        line-height: 1.25rem !important;
+      }
+      
+      /* Dark mode input styling */
+      .dark .react-tel-input .form-control {
+        background-color: rgba(75, 85, 99, 0.5) !important;
+        border-color: rgb(75, 85, 99) !important;
+        color: white !important;
+      }
+      
+      /* Focus state */
+      .react-tel-input .form-control:focus {
+        border-color: rgb(59, 130, 246) !important;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+        outline: none !important;
+      }
+      
+      /* Flag dropdown base */
+      .react-tel-input .flag-dropdown {
+        background-color: transparent !important;
+        border: none !important;
+        border-right: none !important;
+        border-radius: 0.5rem 0 0 0.5rem !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      /* Dark mode flag dropdown */
+      .dark .react-tel-input .flag-dropdown {
+        background-color: transparent !important;
+        border-color: transparent !important;
+      }
+      
+      /* Selected flag */
+      .react-tel-input .selected-flag {
+        padding: 0 8px 0 12px !important;
+        border-radius: 0.5rem 0 0 0.5rem !important;
+        background-color: transparent !important;
+        width: 45px !important; /* Fixed width for the flag area */
+      }
+      
+      /* Fix dropdown position */
+      .react-tel-input .flag-dropdown.open .selected-flag {
+        border-radius: 0.5rem 0 0 0 !important;
+      }
+      
+      /* Flag dropdown hover */
+      .react-tel-input .selected-flag:hover {
+        background-color: rgba(229, 231, 235, 0.3) !important;
+      }
+      
+      /* Dark mode flag dropdown hover */
+      .dark .react-tel-input .selected-flag:hover {
+        background-color: rgba(75, 85, 99, 0.3) !important;
+      }
+      
+      /* Arrow in dropdown */
+      .react-tel-input .selected-flag .arrow {
+        border-top: 4px solid #555 !important;
+        left: 29px !important;
+        top: 50% !important;
+      }
+      
+      .dark .react-tel-input .selected-flag .arrow {
+        border-top: 4px solid #ccc !important;
+      }
+      
+      /* Flag position adjustment */
+      .react-tel-input .flag {
+        margin-right: 5px !important;
+      }
+      
+      /* Fix alignment of the flag inside selected-flag */
+      .react-tel-input .selected-flag .flag {
+        position: absolute !important;
+        top: 50% !important;
+        margin-top: -7px !important;
+        left: 11px !important;
+      }
+      
+      /* Country list dropdown */
+      .react-tel-input .country-list {
+        background-color: rgba(255, 255, 255, 0.98) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgb(209, 213, 219) !important;
+        border-radius: 0.5rem !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+        height: auto !important;
+        width: 300px !important; /* Wider dropdown for better usability */
+        margin: 2px 0 10px -1px !important;
+        padding: 0 !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(156, 163, 175, 0.5) transparent !important;
+        overflow: hidden !important; /* Hide overflow except for scrollable part */
+        display: flex !important;
+        flex-direction: column !important;
+        max-height: 300px !important;
+      }
+      
+      /* Dark mode country list */
+      .dark .react-tel-input .country-list {
+        background-color: rgba(31, 41, 55, 0.98) !important;
+        border-color: rgb(55, 65, 81) !important;
+        color: white !important;
+        scrollbar-color: rgba(75, 85, 99, 0.5) transparent !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
+      }
+      
+      /* Scrollbar styling for divider+div (the actual scrollable container) */
+      .react-tel-input .country-list .divider + div::-webkit-scrollbar {
+        width: 6px !important;
+      }
+      
+      .react-tel-input .country-list .divider + div::-webkit-scrollbar-track {
+        background: transparent !important;
+      }
+      
+      .react-tel-input .country-list .divider + div::-webkit-scrollbar-thumb {
+        background-color: rgba(156, 163, 175, 0.5) !important;
+        border-radius: 20px !important;
+      }
+      
+      /* Fix for dropdown scrolling - prevents page scroll when dropdown is scrolled */
+      .react-tel-input.react-tel-input--focus {
+        position: relative !important;
+        z-index: 1000 !important;
+      }
+      
+      /* Container for phone input */
+      .phone-input-container {
+        position: relative !important;
+        z-index: 10 !important;
+      }
+      
+      /* Prevent scrolling propagation */
+      .react-tel-input .country-list {
+        overscroll-behavior: contain !important;
+        touch-action: pan-y !important;
+      }
+      
+      .dark .react-tel-input .country-list::-webkit-scrollbar-thumb {
+        background-color: rgba(75, 85, 99, 0.5) !important;
+      }
+      
+      /* Scrollable area for country list */
+      .react-tel-input .country-list .divider {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      
+      /* Country list items */
+      .react-tel-input .country-list .country {
+        padding: 9px 10px !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+      
+      /* Scrollable container for countries */
+      .react-tel-input .country-list .divider + div {
+        max-height: 220px !important;
+        overflow-y: auto !important;
+        padding-top: 5px !important;
+        overscroll-behavior: contain !important; /* Prevent scroll chaining */
+        -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
+        flex: 1 !important;
+      }
+      
+      /* Country item hover */
+      .react-tel-input .country-list .country:hover {
+        background-color: rgba(59, 130, 246, 0.1) !important;
+      }
+      
+      /* Country item highlight */
+      .react-tel-input .country-list .country.highlight {
+        background-color: rgba(59, 130, 246, 0.2) !important;
+      }
+      
+      /* Country name */
+      .react-tel-input .country-list .country .country-name {
+        color: #333 !important;
+        font-size: 14px !important;
+        margin-left: 10px !important;
+      }
+      
+      /* Dark mode country name */
+      .dark .react-tel-input .country-list .country .country-name {
+        color: #f3f4f6 !important;
+      }
+      
+      /* Country dial code */
+      .react-tel-input .country-list .country .dial-code {
+        color: #555 !important;
+        font-size: 13px !important;
+        margin-left: 5px !important;
+      }
+      
+      /* Dark mode dial code */
+      .dark .react-tel-input .country-list .country .dial-code {
+        color: #d1d5db !important;
+      }
+      
+      /* Search box */
+      .react-tel-input .country-list .search-box {
+        background-color: rgba(249, 250, 251, 0.9) !important;
+        border: 1px solid rgb(209, 213, 219) !important;
+        border-radius: 0.375rem !important;
+        padding: 8px 12px !important;
+        margin: 0 !important;
+        font-size: 14px !important;
+        color: #333 !important;
+        width: 100% !important;
+        outline: none !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
+      }
+      
+      /* Dark mode search box */
+      .dark .react-tel-input .country-list .search-box {
+        background-color: rgba(55, 65, 81, 0.9) !important;
+        border-color: rgb(75, 85, 99) !important;
+        color: white !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+      }
+      
+      /* Search box focus */
+      .react-tel-input .country-list .search-box:focus {
+        border-color: rgb(59, 130, 246) !important;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+      }
+      
+      /* Search box container */
+      .react-tel-input .country-list .search {
+        padding: 8px 8px !important;
+        background-color: rgba(255, 255, 255, 0.98) !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 2 !important;
+        border-bottom: 1px solid rgba(209, 213, 219, 0.5) !important;
+        border-top-left-radius: 0.5rem !important;
+        border-top-right-radius: 0.5rem !important;
+        backdrop-filter: blur(10px) !important;
+        flex-shrink: 0 !important;
+      }
+      
+      /* Dark mode search container */
+      .dark .react-tel-input .country-list .search {
+        background-color: rgba(31, 41, 55, 0.98) !important;
+        border-bottom: 1px solid rgba(75, 85, 99, 0.5) !important;
+      }
+      
+      /* Search box placeholder */
+      .react-tel-input .country-list .search-box::placeholder {
+        color: #6b7280 !important;
+        opacity: 0.7 !important;
+      }
+      
+      /* Dark mode search box placeholder */
+      .dark .react-tel-input .country-list .search-box::placeholder {
+        color: #d1d5db !important;
+        opacity: 0.7 !important;
+      }
+      
+      /* No entries message */
+      .react-tel-input .country-list .no-entries-message {
+        color: #6b7280 !important;
+        padding: 10px !important;
+        font-size: 14px !important;
+        text-align: center !important;
+        margin-top: 5px !important;
+      }
+      
+      /* Dark mode no entries message */
+      .dark .react-tel-input .country-list .no-entries-message {
+        color: #d1d5db !important;
+      }
+      
+      /* Error state */
+      .react-tel-input.error .form-control {
+        border-color: #ef4444 !important;
+      }
+      
+      .react-tel-input.error .flag-dropdown {
+        border-color: #ef4444 !important;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
     setFormData({
       ...formData,
       [name]: value,
@@ -59,6 +403,47 @@ const Contact = () => {
         ...errors,
         [name]: ''
       });
+    }
+  };
+
+  // Handle phone input change
+  const handlePhoneChange = (value, country) => {
+    // value already contains the full number with country code
+    setFormData({
+      ...formData,
+      mobile: value,
+    });
+    
+    // Basic validation as user types
+    if (value) {
+      const cleanNumber = value.replace(/\D/g, '');
+      if (cleanNumber.length < 7) {
+        setErrors({
+          ...errors,
+          mobile: 'Phone number is too short'
+        });
+      } else if (cleanNumber.length > 15) {
+        setErrors({
+          ...errors,
+          mobile: 'Phone number is too long'
+        });
+      } else {
+        // Clear error when valid
+        if (errors.mobile) {
+          setErrors({
+            ...errors,
+            mobile: ''
+          });
+        }
+      }
+    } else {
+      // Clear error when empty (if it's optional)
+      if (errors.mobile) {
+        setErrors({
+          ...errors,
+          mobile: ''
+        });
+      }
     }
   };
 
@@ -81,6 +466,21 @@ const Contact = () => {
       newErrors.email = 'Email is required';
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
+    }
+
+    // Mobile validation (optional field)
+    if (formData.mobile.trim()) {
+      // react-phone-input-2 provides the full number with country code
+      const cleanNumber = formData.mobile.replace(/\D/g, '');
+      
+      // Most international phone numbers are between 7 and 15 digits (excluding country code)
+      // This is a simple length validation - for a more sophisticated validation,
+      // you might want to use a library like libphonenumber-js
+      if (cleanNumber.length < 7) {
+        newErrors.mobile = 'Phone number is too short';
+      } else if (cleanNumber.length > 15) {
+        newErrors.mobile = 'Phone number is too long';
+      }
     }
 
     // Subject validation
@@ -169,10 +569,15 @@ const Contact = () => {
       // Get current website URL
       const portfolioUrl = window.location.origin;
 
+      // Mobile number is already formatted with country code by react-phone-input-2
+      // The library already adds the + sign, so we don't need to add it again
+      const fullMobileNumber = formData.mobile.trim() || '';
+
       // Combine form data with technical info and website URL
       const templateParams = {
         from_name: formData.name.trim(),
         reply_to: formData.email.trim(),
+        mobile: fullMobileNumber,
         subject: formData.subject.trim(),
         message: formData.message.trim(),
         portfolio_url: portfolioUrl,
@@ -193,6 +598,7 @@ const Contact = () => {
       setFormData({
         name: '',
         email: '',
+        mobile: '',
         subject: '',
         message: ''
       });
@@ -210,11 +616,11 @@ const Contact = () => {
   };
 
   const contactInfo = {
-    email: "karthikpanaganti@gmail.com",
+    email: "kartikpanganti.contact@gmail.com",
     social: {
-      linkedin: "https://linkedin.com/in/kartikpanaganti",
-      github: "https://github.com/kartikpanaganti",
-      twitter: "https://twitter.com/kartikpanaganti"
+      linkedin: "https://linkedin.com/in/kartikpanganti",
+      github: "https://github.com/kartikpanganti",
+      twitter: "https://x.com/kartikpanganti"
     }
   };
 
@@ -250,12 +656,12 @@ const Contact = () => {
           >
             <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500" />
             
-            <div className="relative backdrop-blur-md bg-white/80 dark:bg-gray-800/80 p-6 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            <div className="relative backdrop-blur-md bg-white/80 dark:bg-gray-800/80 p-4 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
                 Send a Message
               </h3>
               
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-3">
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -322,7 +728,48 @@ const Contact = () => {
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.3 }}
+                  transition={{ delay: 0.25 }}
+                >
+                  <label
+                    htmlFor="mobile"
+                    className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                  >
+                    Mobile Number
+                  </label>
+                  <div className="phone-input-container">
+                    <PhoneInput
+                      country={'in'}
+                      value={formData.mobile}
+                      onChange={handlePhoneChange}
+                      inputProps={{
+                        name: 'mobile',
+                        id: 'mobile',
+                        required: true,
+                        placeholder: "Mobile number",
+                      }}
+                      containerClass={`react-tel-input ${errors.mobile ? 'error' : ''}`}
+                      inputClass="form-control"
+                      buttonClass="flag-dropdown"
+                      dropdownClass="country-list"
+                      enableSearch={true}
+                      searchPlaceholder="Search country..."
+                      disableSearchIcon={false}
+                      countryCodeEditable={false}
+                      autoFormat={true}
+                      enableAreaCodes={true}
+                      showDropdown={false}
+                    />
+                  </div>
+                  {errors.mobile && (
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.mobile}</p>
+                  )}
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.35 }}
                 >
                   <label
                     htmlFor="subject"
@@ -353,7 +800,7 @@ const Contact = () => {
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.4 }}
+                  transition={{ delay: 0.45 }}
                 >
                   <label
                     htmlFor="message"
@@ -378,23 +825,6 @@ const Contact = () => {
                   {errors.message && (
                     <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.message}</p>
                   )}
-                  
-                  {/* Enhanced Privacy Notice */}
-                  <motion.div 
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="mt-2 p-2 rounded-lg bg-blue-50/50 dark:bg-blue-900/10 border border-blue-200/50 dark:border-blue-800/30 backdrop-blur-sm"
-                  >
-                    <div className="flex items-start gap-2">
-                      <FaShieldAlt className="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" size={12} />
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
-                          <span className="font-semibold text-blue-700 dark:text-blue-400">Privacy Protected:</span> Your name, email, subject, and message are collected. Technical data (device type, locale, timestamp) is automatically logged for spam prevention and support. This site is protected by reCAPTCHA.
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
                 </motion.div>
 
                 {status.show && (
@@ -515,9 +945,9 @@ const Contact = () => {
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.2, rotate: 5 }}
                     whileTap={{ scale: 0.9 }}
-                    className="p-4 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-500 text-white shadow-lg hover:shadow-xl transition-all"
+                    className="p-4 rounded-xl bg-gradient-to-br from-gray-700 to-gray-900 text-white shadow-lg hover:shadow-xl transition-all"
                   >
-                    <FaTwitter className="text-2xl" />
+                    <FaXTwitter className="text-2xl" />
                   </motion.a>
                 </div>
               </div>

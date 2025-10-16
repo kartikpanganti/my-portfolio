@@ -21,10 +21,13 @@ const Navbar = () => {
     { name: 'Contact', to: 'contact' },
   ];
 
-  // Handle scroll effect
+  // Handle scroll effect - navbar stays transparent until next section appears
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      // Get viewport height and check if we've scrolled past hero section
+      const viewportHeight = window.innerHeight;
+      const scrollThreshold = viewportHeight - 100; // Trigger when next section is 100px visible
+      setScrolled(window.scrollY > scrollThreshold);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -52,10 +55,10 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`fixed w-full top-0 z-50 transition-all duration-200 ${
+      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-white/95 dark:bg-gray-900/95 md:bg-white/90 md:dark:bg-gray-900/90 md:backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
+          : 'bg-transparent backdrop-blur-none'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,7 +77,17 @@ const Navbar = () => {
               duration={1}
               className="cursor-pointer"
             >
-              <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text hover:from-pink-500 hover:via-purple-500 hover:to-indigo-500 transition-all duration-300">
+              <span 
+                className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text hover:from-pink-500 hover:via-purple-500 hover:to-indigo-500 transition-all duration-300"
+                style={{
+                  filter: !scrolled 
+                    ? (isDark 
+                      ? 'drop-shadow(0 0 10px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 20px rgba(0, 0, 0, 0.7))'
+                      : 'drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 4px rgba(0, 0, 0, 0.4)) drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.3))')
+                    : 'none',
+                  WebkitTextStroke: !scrolled && !isDark ? '1px rgba(0, 0, 0, 0.3)' : '0',
+                }}
+              >
                 Portfolio
               </span>
             </Link>
@@ -100,8 +113,19 @@ const Navbar = () => {
                     className={`px-3 py-2 rounded-md text-sm font-medium cursor-pointer transition-all duration-300 ${
                       activeSection === item.to
                         ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
-                        : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        : scrolled
+                        ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        : 'text-white dark:text-white hover:text-indigo-300 dark:hover:text-indigo-400'
                     }`}
+                    style={{
+                      textShadow: !scrolled 
+                        ? (isDark 
+                          ? '0 0 10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.7)'
+                          : '0.5px 0.5px 1.5px rgba(0, 0, 0, 0.5), 0 0 3px rgba(0, 0, 0, 0.4), 1px 1px 4px rgba(0, 0, 0, 0.3)')
+                        : 'none',
+                      fontWeight: !scrolled ? '700' : '500',
+                      WebkitTextStroke: !scrolled && !isDark ? '0.5px rgba(0, 0, 0, 0.3)' : '0',
+                    }}
                   >
                     {item.name}
                   </Link>
@@ -118,7 +142,18 @@ const Navbar = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-300"
+              className={`p-2 rounded-lg transition-all duration-300 ${
+                scrolled
+                  ? 'bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700'
+                  : 'bg-white/30 dark:bg-black/20 backdrop-blur-sm text-white dark:text-white hover:bg-white/40 dark:hover:bg-black/30'
+              }`}
+              style={{
+                filter: !scrolled 
+                  ? (isDark 
+                    ? 'drop-shadow(0 0 10px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 20px rgba(0, 0, 0, 0.7))'
+                    : 'drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 4px rgba(0, 0, 0, 0.4))')
+                  : 'none'
+              }}
               aria-label="Toggle dark mode"
             >
               <AnimatePresence mode="wait">
@@ -155,7 +190,18 @@ const Navbar = () => {
                 e.stopPropagation();
                 setIsOpen(!isOpen);
               }}
-              className="md:hidden p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-300"
+              className={`md:hidden p-2 rounded-lg transition-all duration-300 ${
+                scrolled
+                  ? 'bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700'
+                  : 'bg-white/30 dark:bg-black/20 backdrop-blur-sm text-white dark:text-white hover:bg-white/40 dark:hover:bg-black/30'
+              }`}
+              style={{
+                filter: !scrolled 
+                  ? (isDark 
+                    ? 'drop-shadow(0 0 10px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 20px rgba(0, 0, 0, 0.7))'
+                    : 'drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 4px rgba(0, 0, 0, 0.4))')
+                  : 'none'
+              }}
               aria-label="Toggle menu"
             >
               <AnimatePresence mode="wait">
