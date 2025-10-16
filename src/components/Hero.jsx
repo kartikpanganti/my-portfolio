@@ -150,6 +150,7 @@ const Hero = () => {
       id="hero"
       ref={containerRef}
       className="relative min-h-[120vh] md:min-h-[130vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-background-light to-gray-50 dark:from-background-dark dark:to-gray-900 pb-20 md:pb-32"
+      style={{ willChange: 'opacity, transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
     >
       {/* Video background for all devices */}
       <div className="absolute inset-0">

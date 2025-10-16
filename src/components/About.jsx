@@ -58,7 +58,7 @@ const About = () => {
   };
 
   return (
-    <section id="about" className="py-20 relative overflow-hidden">
+  <section id="about" className="py-20 relative overflow-hidden" style={{ willChange: 'opacity, transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-light/5 to-transparent dark:via-primary-dark/5" />
       
