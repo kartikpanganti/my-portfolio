@@ -10,7 +10,7 @@ This is a dynamic, responsive developer portfolio built with React, Vite, and Ta
 - **Contact Form:** Integrated with reCAPTCHA and EmailJS for secure messaging.
 - **Mobile Friendly:** Fully responsive for all devices.
 
-View the live site at: [kartikpanganti.com](https://kartikpanganti.me)
+View the live site at: [kartikpanganti.me](https://kartikpanganti.me)
 
 ---
 
