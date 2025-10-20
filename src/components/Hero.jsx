@@ -149,7 +149,7 @@ const Hero = () => {
     <section 
       id="hero"
       ref={containerRef}
-      className="relative min-h-[120vh] md:min-h-[130vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-background-light to-gray-50 dark:from-background-dark dark:to-gray-900 pb-20 md:pb-32"
+  className="relative min-h-[110vh] sm:min-h-[100vh] md:min-h-[102vh] lg:min-h-[110vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-background-light to-gray-50 dark:from-background-dark dark:to-gray-900 pb-12 md:pb-20"
       style={{ willChange: 'opacity, transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
     >
       {/* Video background for all devices */}
@@ -160,20 +160,20 @@ const Hero = () => {
       {/* Bottom fade effect to separate from next section */}
       <div className="absolute bottom-0 left-0 right-0 h-32 md:h-40 bg-gradient-to-t from-gray-50 dark:from-gray-900 to-transparent pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 md:py-24 lg:py-32 relative z-10">
+  <div className="max-w-6xl mx-auto px-2 sm:px-6 md:px-8 py-8 sm:py-16 md:py-24 lg:py-32 relative z-10">
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="flex flex-col md:flex-row items-center gap-4 sm:gap-8 md:gap-12"
+          className="flex flex-col md:flex-row items-center md:items-stretch gap-4 sm:gap-8 md:gap-10"
         >
           <motion.div 
             style={{ y }}
-            className="md:w-1/2 mb-6 md:mb-0"
+            className="md:w-1/2 mb-6 md:mb-0 w-full text-center md:text-left flex flex-col items-center md:items-start"
           >
             <motion.h1 
               variants={itemVariants}
-              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold mb-3 sm:mb-6"
+              className="text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-extrabold mb-3 sm:mb-6"
               style={{
                 color: isDark ? '#ffffff' : '#ffffff',
                 textShadow: isDark 
@@ -199,7 +199,7 @@ const Hero = () => {
 
             <motion.div 
               variants={itemVariants}
-              className="text-lg sm:text-xl md:text-2xl mb-4 sm:mb-6 h-12 sm:h-16 font-heading font-bold"
+              className="text-base xs:text-lg sm:text-xl md:text-2xl mb-3 sm:mb-6 h-10 sm:h-16 font-heading font-bold"
               style={{
                 color: isDark ? '#e5e7eb' : '#ffffff',
                 textShadow: isDark 
@@ -228,7 +228,7 @@ const Hero = () => {
 
             <motion.p 
               variants={itemVariants}
-              className="mb-6 sm:mb-8 text-base sm:text-lg max-w-lg font-semibold"
+              className="mb-4 sm:mb-8 text-sm xs:text-base sm:text-lg max-w-xs xs:max-w-sm sm:max-w-lg font-semibold"
               style={{
                 color: isDark ? '#d1d5db' : '#ffffff',
                 textShadow: isDark 
@@ -238,12 +238,12 @@ const Hero = () => {
                 fontWeight: '700',
               }}
             >
-              Recent CSE graduate with a foundation in web development and a growing interest in AI. I enjoy turning ideas into projects and continuously improving my skills
+              I build web, mobile, and AI-driven solutions that scale, turning ideas into high-performance products.
             </motion.p>
 
             <motion.div 
               variants={itemVariants}
-              className="flex flex-wrap gap-3 sm:gap-4"
+              className="flex flex-wrap gap-3 sm:gap-4 justify-center md:justify-start"
             >
               <motion.a 
                 href="#contact"
@@ -259,7 +259,7 @@ const Hero = () => {
                 Let's Connect
               </motion.a>
               <motion.a 
-                href={RESUMEE} download="Kartik_Panaganti_Resume.pdf"
+                href={RESUMEE} download="Kartik_Panganti_Resume.pdf"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-4 sm:px-8 py-2.5 sm:py-4 text-sm sm:text-base border-2 rounded-full font-bold transition-all duration-300"
@@ -283,13 +283,13 @@ const Hero = () => {
 
             <motion.div 
               variants={itemVariants}
-              className="flex mt-6 sm:mt-12 space-x-4 sm:space-x-6"
+              className="flex mt-4 sm:mt-12 space-x-4 sm:space-x-6 justify-center md:justify-start"
             >
               
               {[
-                { icon: FaGithub, href: "https://github.com/kartikpanaganti" },
-                { icon: FaLinkedin, href: "https://linkedin.com/in/kartikpanaganti" },
-                { icon: FaXTwitter, href: "https://x.com/kartikpanaganti"},
+                { icon: FaGithub, href: "https://github.com/kartikpanganti" },
+                { icon: FaLinkedin, href: "https://linkedin.com/in/kartikpanganti" },
+                { icon: FaXTwitter, href: "https://x.com/kartikpanganti"},
                 { 
                   icon: FaShare, 
                   href: "#", 
@@ -333,10 +333,10 @@ const Hero = () => {
 
           <motion.div 
             variants={itemVariants}
-            className="md:w-1/2 relative"
+            className="md:w-1/2 relative flex md:justify-end"
             style={{ y }}
           >
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[28rem] md:h-[28rem] lg:w-[500px] lg:h-[500px]">
+            <div className="relative w-64 h-64 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96">
               {/* Profile Image Container */}
               <div className="relative w-full h-full">
                 {/* Animated Background Glow */}

@@ -1,37 +1,56 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaCode, FaCloud, FaDatabase, FaGlobe, FaRobot, FaBolt, FaServer } from 'react-icons/fa';
+import { FaCode, FaPython,FaDatabase, FaGlobe, FaRobot, FaBolt,FaLaptopCode,FaProjectDiagram } from 'react-icons/fa';
 
 const About = () => {
   const details = {
-    bio: `Full-stack developer specializing in React and Node.js. Currently pursuing B.Tech in CSE at CMRIT. 
-    Passionate about creating efficient, scalable solutions and exploring new technologies.`,
+    bio: `I have hands-on experience making web apps, mobile apps, and AI-driven solutions that grow and work well because I am a software developer and a CSE graduate. I like taking ideas and turning them into useful, high-quality products while I learn new technologies all the time. I want to use my creativity and modern development methods to come up with solutions that are both useful and important.`,
     focus: [
-      { 
-        title: 'Web Development', 
-        desc: 'React, Node.js, Modern JavaScript',
-        icon: <FaCode className="text-blue-500" />,
-        color: "from-blue-400 to-cyan-500"
-      },
-      { 
-        title: 'Cloud & DevOps', 
-        desc: 'AWS, Docker, CI/CD',
-        icon: <FaCloud className="text-purple-500" />,
-        color: "from-purple-400 to-pink-500"
-      },
-      { 
-        title: 'Data Structures', 
-        desc: 'Algorithmic problem solving',
-        icon: <FaDatabase className="text-green-500" />,
-        color: "from-green-400 to-emerald-500"
-      }
+  { 
+    title: 'Web Development', 
+    desc: 'React, Node.js, Modern JavaScript',
+    icon: <FaCode className="text-white-500" />,
+    color: "from-blue-400 to-cyan-500"
+  },
+  { 
+    title: 'AI & ML', 
+    desc: 'Recommendation Systems, AI experiments',
+    icon: <FaPython className="text-blue-500" />,
+    color: "from-yellow-400 to-orange-500"
+  },
+  { 
+    title: 'Data Structures', 
+    desc: 'Problem solving & algorithms',
+    icon: <FaDatabase className="text-white-500" />,
+    color: "from-green-400 to-emerald-500"
+  }
+],
 
-    ],
     interests:[
-      { key: 'Open Source', icon: <FaGlobe className="text-blue-500" />, color: "from-blue-400 to-cyan-500" },
-      { key: 'AI/ML', icon: <FaRobot className="text-purple-500" />, color: "from-purple-400 to-pink-500" },
-      { key: 'System Design', icon: <FaBolt className="text-yellow-500" />, color: "from-yellow-400 to-orange-500" },
-      { key: 'Cloud Computing', icon: <FaServer className="text-indigo-500" />, color: "from-indigo-400 to-blue-500" }
+        { 
+    key: 'Open Source', 
+    icon: <FaGlobe className="text-blue-500" />, 
+    color: "from-blue-400 to-cyan-500" 
+  },
+  { 
+    key: 'AI & Python', 
+    icon: <FaRobot className="text-purple-500" />, 
+    color: "from-purple-400 to-pink-500" 
+  },
+  { 
+    key: 'System Design', 
+    icon: <FaBolt className="text-yellow-500" />, 
+    color: "from-yellow-400 to-orange-500" 
+  },
+  { 
+    key: 'Full Stack Development', 
+    icon: <FaLaptopCode className="text-green-500" />, 
+    color: "from-green-400 to-emerald-500" 
+  },
+  {  key: 'Project Planning', 
+    icon: <FaProjectDiagram className="text-indigo-500" />, 
+    color: "from-indigo-400 to-blue-500" 
+  }
     ]
   };
 
@@ -74,7 +93,7 @@ const About = () => {
             About <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark">Me</span>
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Developer, learner, and tech enthusiast
+            Developer , Learner , Tech Enthusiast
           </p>
         </motion.div>
 

@@ -5,49 +5,33 @@ import { FaBriefcase, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 const Experience = () => {
   const experiences = [
     {
-      role: "Full Stack Developer Intern",
-      company: "TechVision Solutions",
-      duration: "Jan 2024 - Present",
-      location: "Hyderabad, India",
+      role: "Full Stack Java Developer Intern",
+      company: "Symbiosis International University",
+      duration: "Dec 2024 - Apr 2025",
+      location: "On-site",
       type: "Full-time",
-      color: "from-blue-500 to-cyan-500",
-      description: [
-        "Developing scalable microservices using Node.js and Express",
-        "Implementing responsive UI components with React and Tailwind",
-        "Optimized database queries improving performance by 40%",
-        "Contributing to CI/CD pipeline implementation"
-      ],
-      technologies: ["React", "Node.js", "PostgreSQL", "Docker", "AWS"]
-    },
-    {
-      role: "Web Development Intern",
-      company: "InnovateTech",
-      duration: "Jun 2023 - Dec 2023",
-      location: "Remote",
-      type: "Part-time",
       color: "from-purple-500 to-pink-500",
       description: [
-        "Built and maintained e-commerce features using React",
-        "Integrated payment gateways and order management systems",
-        "Reduced page load time by 50% through optimization",
-        "Collaborated with UI/UX team for design implementation"
+        "Developed RESTful APIs using Spring Boot",
+        "Implemented front-end components with React",
+        "Managed database schemas and queries with MySQL",
       ],
-      technologies: ["React", "Redux", "MongoDB", "Express", "Stripe"]
+      technologies: ["Java", "Spring Boot", "React", "MySQL",]
     },
     {
       role: "Open Source Contributor",
       company: "Various Projects",
-      duration: "2022 - Present",
+      duration: "2025 - Present",
       location: "Remote",
-      type: "Volunteer",
+      type: "Software Developer",
       color: "from-green-500 to-emerald-500",
       description: [
-        "Contributing to popular open-source projects",
+        "Contributing open-source projects",
         "Implementing new features and fixing bugs",
+        "Small business solutions",
         "Collaborating with global developer community",
-        "Maintaining documentation and testing"
       ],
-      technologies: ["JavaScript", "Python", "Git", "Documentation"]
+      technologies: ["WebApps", "Mobile Apps", "MERN-STACK", "Django", "Flask", "APIs", "UI/UX Design"]
     }
   ];
 

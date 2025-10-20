@@ -1,110 +1,89 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  FaCertificate, 
-  FaAward, 
   FaExternalLinkAlt, 
   FaCalendarAlt,
-  FaTrophy,
-  FaMedal,
-  FaStar,
   FaAws,
   FaCloud,
   FaReact,
   FaCode,
-  FaGraduationCap
+  FaGraduationCap,
+  FaAward,
+  FaFileAlt
 } from 'react-icons/fa';
 
 const Certifications = () => {
-  const [filter, setFilter] = useState('All');
   const [hoveredCard, setHoveredCard] = useState(null);
 
   const certifications = [
+
+
     {
       id: 1,
-      title: "AWS Certified Solutions Architect",
-      issuer: "Amazon Web Services",
-      date: "March 2024",
-      category: "Cloud",
-      icon: <FaAws className="text-4xl text-orange-500" />,
-      credentialId: "AWS-CERT-123456",
-      verifyLink: "https://aws.amazon.com/verification",
-      skills: ["AWS", "Cloud Architecture", "DevOps"],
-      description: "Professional-level certification demonstrating expertise in designing distributed systems on AWS.",
-      badge: <FaTrophy className="text-yellow-400" />
+      title: "'WINNER - Nation Level Hackathon CHAKRAVYUH 1.0 PHANDHARPUR. ",
+      issuer: "SVERI's College of Engineering",
+      date: "March 2025",
+      icon: <FaAward className="text-4xl text-yellow-500" />,
+      credentialId: "",
+      verifyLink: "https://www.linkedin.com/posts/om-swami-2ab165261_chakravyuh1-ieee-medicalinventorysystem-ugcPost-7318266383178350593-F9m3?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD6TwA4B95oRizwv7Fb72SJRH4qg8GCdTQY",
+      buttonType: "achievement",
+      skills: [],
+      description: "Secured 2nd Place in the Nation Level Hackathon CHAKRAVYUH 1.0 organized by IEEE at SVERI's College of Engg. Phandarpur, showcasing innovative problem-solving skills and teamwork."
     },
+
+    {
+      id: 5,
+      title: "Research Paper Publication - JETIR Journal (Volume 12, Issue 5)",
+      issuer: "Journal of Emerging Technologies and Innovative Research (JETIR)",
+      date: "May 2025",
+      icon: <FaFileAlt className="text-4xl text-blue-500" />,
+      credentialId: "JETIR2505434 | Registration: 561914",
+      verifyLink: "https://www.jetir.org/view?paper=JETIR2505434",
+      pdfLink: "https://www.jetir.org/papers/JETIR2505434.pdf",
+      buttonType: "publication",
+      skills: ["Research", "Technical Writing", "Academic Publishing", "Engineering"],
+      description: "Published research paper in JETIR Journal (Volume 12, Issue 5, May 2025) with DOI and ISSN: 2349-5162. Research focused on Engineering domain from Solapur, Maharashtra, India."
+    },
+   
     {
       id: 2,
-      title: "Google Cloud Professional Developer",
-      issuer: "Google Cloud",
+      title: "Frontend Web Development using JavaScript and React.js course.",
+      issuer: "DevTown",
       date: "January 2024",
-      category: "Cloud",
-      icon: <FaCloud className="text-4xl text-blue-500" />,
+      icon: <FaReact className="text-4xl text-cyan-500" />,
       credentialId: "GCP-DEV-789012",
-      verifyLink: "https://cloud.google.com/certification",
-      skills: ["GCP", "Cloud Development", "Kubernetes"],
-      description: "Demonstrates proficiency in building scalable applications on Google Cloud Platform.",
-      badge: <FaMedal className="text-blue-400" />
+      verifyLink: "https://www.cert.devtown.in/verify/2cXW8F",
+      buttonType: "certificate",
+      skills: ["React", "JavaScript", "Tailwind CSS", "Frontend Web Development"],
+      description: "In-depth course on building responsive web applications using React.js and modern JavaScript."
     },
     {
       id: 3,
-      title: "React - The Complete Guide",
-      issuer: "Udemy",
-      date: "December 2023",
-      category: "Development",
+      title: "Backend Web Development using Node.js and Express.js course.",
+      issuer: "DevTown",
+      date: "January 2024",
       icon: <FaReact className="text-4xl text-cyan-500" />,
-      credentialId: "UC-REACT-345678",
-      verifyLink: "https://udemy.com/certificate",
-      skills: ["React", "Redux", "Next.js"],
-      description: "Comprehensive course covering React fundamentals to advanced concepts.",
-      badge: <FaStar className="text-purple-400" />
+      credentialId: "GCP-DEV-789013",
+      verifyLink: "https://www.cert.devtown.in/verify/2rV5sh",
+      buttonType: "certificate",
+      skills: ["Node.js", "Express.js", "MongoDB", "Backend Web Development"],
+      description: "In-depth course on building RESTful APIs and web applications using Node.js and Express.js."
     },
     {
       id: 4,
-      title: "Microsoft Azure Fundamentals",
-      issuer: "Microsoft",
+      title: "'Project Management for Beginners' course",
+      issuer: "Simplilearn",
       date: "November 2023",
-      category: "Cloud",
-      icon: <FaCloud className="text-4xl text-blue-600" />,
-      credentialId: "MS-AZ-900-456789",
-      verifyLink: "https://microsoft.com/learn",
-      skills: ["Azure", "Cloud Services", "Virtual Machines"],
-      description: "Foundation-level knowledge of cloud services and Azure platform.",
-      badge: <FaAward className="text-green-400" />
+      icon: <FaGraduationCap className="text-4xl text-yellow-500" />,
+      credentialId: "PMB-123456",
+      verifyLink: "https://www.linkedin.com/posts/kartikpanganti_projectmanagement-careerroadmap-newbeginnings-activity-7122431654622621696-x2OZ?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD6TwA4B95oRizwv7Fb72SJRH4qg8GCdTQY",
+      buttonType: "certificate",
+      skills: ["Project Management", "Agile", "Scrum", "Leadership"],
+      description: "Comprehensive course covering the fundamentals of project management, methodologies, and best practices."
     },
-    {
-      id: 5,
-      title: "Full Stack Web Development",
-      issuer: "Coursera",
-      date: "September 2023",
-      category: "Development",
-      icon: <FaGraduationCap className="text-4xl text-blue-500" />,
-      credentialId: "COURSERA-FS-567890",
-      verifyLink: "https://coursera.org/verify",
-      skills: ["HTML", "CSS", "JavaScript", "Node.js"],
-      description: "Comprehensive specialization covering front-end and back-end development.",
-      badge: <FaCertificate className="text-indigo-400" />
-    },
-    {
-      id: 6,
-      title: "Advanced JavaScript Concepts",
-      issuer: "Udemy",
-      date: "August 2023",
-      category: "Development",
-      icon: <FaCode className="text-4xl text-purple-600" />,
-      credentialId: "UC-JS-678901",
-      verifyLink: "https://udemy.com/certificate",
-      skills: ["JavaScript", "ES6+", "Async/Await"],
-      description: "Deep dive into advanced JavaScript patterns and best practices.",
-      badge: <FaStar className="text-yellow-400" />
-    }
   ];
 
-  const categories = ['All', 'Cloud', 'Development'];
-
-  const filteredCertifications = filter === 'All' 
-    ? certifications 
-    : certifications.filter(cert => cert.category === filter);
+  const filteredCertifications = certifications;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -151,30 +130,7 @@ const Certifications = () => {
           </p>
         </motion.div>
 
-        {/* Filter Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
-        >
-          {categories.map((category) => (
-            <motion.button
-              key={category}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setFilter(category)}
-              className={`px-6 py-2.5 rounded-full font-semibold transition-all duration-300 ${
-                filter === category
-                  ? 'bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark text-white shadow-lg'
-                  : 'backdrop-blur-md bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-primary-light dark:hover:border-primary-dark'
-              }`}
-            >
-              {category}
-            </motion.button>
-          ))}
-        </motion.div>
+        {/* Filters removed — showing all certifications */}
 
         {/* Certifications Grid */}
         <motion.div
@@ -200,12 +156,9 @@ const Certifications = () => {
                 <div className="relative backdrop-blur-md bg-white/80 dark:bg-gray-800/80 rounded-2xl overflow-hidden border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-500">
                   <div className="p-6">
                     {/* Icon & Badge */}
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start justify-start mb-4">
                       <div className="text-4xl">
                         {cert.icon}
-                      </div>
-                      <div className="text-3xl">
-                        {cert.badge}
                       </div>
                     </div>
 
@@ -249,17 +202,50 @@ const Certifications = () => {
                   </div>
 
                   {/* Verify Link */}
-                  <motion.a
-                    href={cert.verifyLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg"
-                  >
-                    <span>Verify Certificate</span>
-                    <FaExternalLinkAlt className="ml-2 text-sm" />
-                  </motion.a>
+                  {cert.buttonType === 'publication' ? (
+                    <div className="flex flex-col gap-2">
+                      <motion.a
+                        href={cert.verifyLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-lg font-medium hover:from-green-600 hover:to-teal-600 transition-all duration-300 shadow-md hover:shadow-lg"
+                      >
+                        <span>View Publication</span>
+                        <FaExternalLinkAlt className="ml-2 text-sm" />
+                      </motion.a>
+                      <motion.a
+                        href={cert.pdfLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg font-medium hover:from-red-600 hover:to-pink-600 transition-all duration-300 shadow-md hover:shadow-lg"
+                      >
+                        <span>Download / View Paper</span>
+                        <FaExternalLinkAlt className="ml-2 text-sm" />
+                      </motion.a>
+                    </div>
+                  ) : (
+                    <motion.a
+                      href={cert.verifyLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`inline-flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg ${
+                        cert.buttonType === 'achievement'
+                          ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white hover:from-yellow-600 hover:to-orange-600'
+                          : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700'
+                      }`}
+                    >
+                      <span>
+                        {cert.buttonType === 'achievement' ? 'Verify Achievement' : 'Verify Certificate'}
+                      </span>
+                      <FaExternalLinkAlt className="ml-2 text-sm" />
+                    </motion.a>
+                  )}
                 </div>
 
                 {/* Hover Effect Overlay */}
