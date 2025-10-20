@@ -24,10 +24,10 @@ const Certifications = () => {
       issuer: "SVERI's College of Engineering",
       date: "March 2025",
       icon: <FaAward className="text-4xl text-yellow-500" />,
-      credentialId: "",
+      credentialId: "N/A",
       verifyLink: "https://www.linkedin.com/posts/om-swami-2ab165261_chakravyuh1-ieee-medicalinventorysystem-ugcPost-7318266383178350593-F9m3?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD6TwA4B95oRizwv7Fb72SJRH4qg8GCdTQY",
       buttonType: "achievement",
-      skills: [],
+      skills: ["Problem Solving","Web Development",  "Teamwork", "Innovation", "Hackathon"],
       description: "Secured 2nd Place in the Nation Level Hackathon CHAKRAVYUH 1.0 organized by IEEE at SVERI's College of Engg. Phandarpur, showcasing innovative problem-solving skills and teamwork."
     },
 

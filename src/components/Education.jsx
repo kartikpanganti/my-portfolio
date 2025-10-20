@@ -7,32 +7,32 @@ import { useModal } from '../contexts/ModalContext';
 const hackathonImages = [
   {
     type: 'image',
-    src: '/src/assets/modal_image/Hackathon/hack1.jpg',
+    src: '/modal_image/Hackathon/hack1.jpg',
     alt: 'Hackathon GROUP PHOTO',
     description: 'Prize Distribution by Hackathon Sponsors IEEE Bombay Section',
   },
   {
     type: 'image',
-    src: '/src/assets/modal_image/Hackathon/hack2.jpg',
+    src: '/modal_image/Hackathon/hack2.jpg',
     alt: 'Hackathon Coding Time',
     description: 'Team Brainstorming ideas for the Project',
   },
   {
     type: 'image',
-    src: '/src/assets/modal_image/Hackathon/hack3.jpg',
+    src: '/modal_image/Hackathon/hack3.jpg',
     alt: 'Trophy and Certificate Award',
     description: 'Winning trophy and certificate for the hackathon',
   },
   {
     type: 'image',
-    src: '/src/assets/modal_image/Hackathon/hack4.jpg',
+    src: '/modal_image/Hackathon/hack4.jpg',
     alt: 'CERTIFICATE PHOTO',
     description: 'Certificate awarded for participation in the hackathon',
   }
   ,
   {
     type: 'image',
-    src: '/src/assets/modal_image/Hackathon/hack5.jpg',
+    src: '/modal_image/Hackathon/hack5.jpg',
     alt: 'Heading From Solapur to Phandarpur SVERI College',
     description: 'Appreciation from our college media',
   },
@@ -42,25 +42,25 @@ const prayogImages = [
   // Add your Prayog2k25 images here, example:
   {
     type: 'image',
-    src: '/src/assets/modal_image/Prayog2k25/prayog1.jpg',
+    src: '/modal_image/Prayog2k25/prayog1.jpg',
     alt: 'PRAYOG 2K25 Event',
     description: 'Prayog 2K25 Team with our Team Mentor for PRAYOG 2K25 image',
   },
   {
     type: 'image',
-    src: '/src/assets/modal_image/Prayog2k25/prayog2.jpg',
+    src: '/modal_image/Prayog2k25/prayog2.jpg',
     alt: 'PRAYOG 2K25 Event',
     description: 'Certificate of Achievement for PRAYOG 2K25',
   },
   {
     type: 'image',
-    src: '/src/assets/modal_image/Prayog2k25/prayog3.jpg',
+    src: '/modal_image/Prayog2k25/prayog3.jpg',
     alt: 'PRAYOG 2K25 Event',
     description: 'Winning Moment at PRAYOG 2K25',
   },
   {
     type: 'image',
-    src: '/src/assets/modal_image/Prayog2k25/prayog4.jpg',
+    src: '/modal_image/Prayog2k25/prayog4.jpg',
     alt: 'PRAYOG 2K25 Event',
     description: 'Our Project Idea and Presentation at PRAYOG 2K25',
   }
