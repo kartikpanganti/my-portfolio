@@ -15,6 +15,13 @@ export const RecaptchaProvider = ({ children }) => {
   const [showRecaptchaBadge, setShowRecaptchaBadge] = useState(false);
   const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
+  const isLocalhost =
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+  const enableRecaptchaOnLocalhost = import.meta.env.VITE_ENABLE_RECAPTCHA_DEV === 'true';
+  const bypassRecaptcha = import.meta.env.DEV && isLocalhost && !enableRecaptchaOnLocalhost;
+
   // Debug logging for environment variables (only in actual development)
   useEffect(() => {
     // Removed debug log
@@ -32,6 +39,14 @@ export const RecaptchaProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (bypassRecaptcha) {
+      // In localhost dev, avoid loading the external reCAPTCHA script (often blocked by extensions/network).
+      // We still mark as loaded so the contact form can be tested end-to-end.
+      setRecaptchaLoaded(true);
+      setTimeout(() => toggleRecaptchaBadge(false), 100);
+      return;
+    }
+
     if (!RECAPTCHA_SITE_KEY) {
       if (import.meta.env.DEV) {
         console.warn('reCAPTCHA: Site key not found. reCAPTCHA will not be loaded.');
@@ -62,7 +77,9 @@ export const RecaptchaProvider = ({ children }) => {
       setTimeout(() => toggleRecaptchaBadge(false), 100);
     };
     script.onerror = (error) => {
-      console.error('reCAPTCHA: Failed to load script', error);
+      // Keep this non-fatal. If the script is blocked, the contact form will show a user-friendly message.
+      console.warn('reCAPTCHA: Failed to load script', error);
+      setRecaptchaLoaded(false);
     };
     document.head.appendChild(script);
 
@@ -78,6 +95,10 @@ export const RecaptchaProvider = ({ children }) => {
   }, [RECAPTCHA_SITE_KEY]);
 
   const executeRecaptcha = async (action = 'submit') => {
+    if (bypassRecaptcha) {
+      return `dev-bypass-token:${action}`;
+    }
+
     if (!recaptchaLoaded || !window.grecaptcha || !window.grecaptcha.enterprise) {
       throw new Error('reCAPTCHA Enterprise not loaded. Please refresh the page.');
     }
@@ -98,6 +119,7 @@ export const RecaptchaProvider = ({ children }) => {
     recaptchaLoaded,
     RECAPTCHA_SITE_KEY,
     executeRecaptcha,
+    bypassRecaptcha,
     showRecaptchaBadge,
     toggleRecaptchaBadge
   };

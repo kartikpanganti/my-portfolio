@@ -11,7 +11,7 @@ const Contact = () => {
   const form = useRef();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ show: false, error: false, message: '' });
-  const { recaptchaLoaded, RECAPTCHA_SITE_KEY, executeRecaptcha } = useRecaptcha();
+  const { recaptchaLoaded, RECAPTCHA_SITE_KEY, executeRecaptcha, bypassRecaptcha } = useRecaptcha();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -549,19 +549,19 @@ const Contact = () => {
 
     try {
       // Validate environment variables before proceeding
-      if (!RECAPTCHA_SITE_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+      if ((!RECAPTCHA_SITE_KEY && !bypassRecaptcha) || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
         throw new Error('Configuration error. Please contact the site administrator.');
       }
 
       // Check if reCAPTCHA Enterprise is loaded
-      if (!recaptchaLoaded) {
+      if (!bypassRecaptcha && !recaptchaLoaded) {
         throw new Error('reCAPTCHA Enterprise not loaded. Please refresh the page.');
       }
 
       // Execute reCAPTCHA Enterprise
       const token = await executeRecaptcha('CONTACT_FORM');
 
-      if (!token) {
+      if (!bypassRecaptcha && !token) {
         throw new Error('reCAPTCHA verification failed');
       }
 
