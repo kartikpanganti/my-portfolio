@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaHeart, FaArrowUp, FaShieldAlt } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaHeart, FaArrowUp, FaShieldAlt, FaEye } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import { useRecaptcha } from '../contexts/RecaptchaContext';
 
 const Footer = () => {
   const { RECAPTCHA_SITE_KEY, toggleRecaptchaBadge } = useRecaptcha();
   const footerRef = useRef(null);
+  const [visitCount, setVisitCount] = useState(null);
+  const [isLoadingVisits, setIsLoadingVisits] = useState(true);
 
   // Intersection Observer to show reCAPTCHA badge when footer is visible
   useEffect(() => {
@@ -39,6 +41,40 @@ const Footer = () => {
       toggleRecaptchaBadge(false);
     };
   }, [toggleRecaptchaBadge]);
+
+  // Visit counter effect
+  useEffect(() => {
+    const fetchVisitCount = async () => {
+      try {
+        // Using a simple counter API - you can replace with your own backend
+        const namespace = 'kartik-portfolio';
+        const key = 'page-visits';
+        
+        // Increment the counter
+        const response = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setVisitCount(data.value);
+        } else {
+          // Fallback: try to get current count
+          const getResponse = await fetch(`https://api.countapi.xyz/get/${namespace}/${key}`);
+          if (getResponse.ok) {
+            const getData = await getResponse.json();
+            setVisitCount(getData.value || 0);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching visit count:', error);
+        // Set a placeholder or hide the counter
+        setVisitCount(null);
+      } finally {
+        setIsLoadingVisits(false);
+      }
+    };
+
+    fetchVisitCount();
+  }, []);
 
   const socialLinks = [
     {
@@ -222,18 +258,42 @@ const Footer = () => {
 
           {/* Copyright and Back to Top */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm flex items-center gap-2">
-              <span>© 2025 Kartik Panganti. All rights reserved.</span>
-              <span className="hidden md:inline">•</span>
-              <span className="flex items-center gap-1">
-                Made with <motion.span
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 0.5, repeat: Infinity }}
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+              <p className="text-gray-400 text-sm flex items-center gap-2">
+                <span>© 2025 Kartik Panganti. All rights reserved.</span>
+                <span className="hidden md:inline">•</span>
+                <span className="flex items-center gap-1">
+                  Made with <motion.span
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                  >
+                    <FaHeart className="text-red-500" />
+                  </motion.span>
+                </span>
+              </p>
+              
+              {/* Visit Counter */}
+              {visitCount !== null && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-900 rounded-full border border-gray-700 dark:border-gray-700"
                 >
-                  <FaHeart className="text-red-500" />
-                </motion.span>
-              </span>
-            </p>
+                  <FaEye className="text-primary-light text-sm" />
+                  <span className="text-xs text-gray-300">
+                    {isLoadingVisits ? (
+                      <span className="inline-block w-12 h-3 bg-gray-700 animate-pulse rounded"></span>
+                    ) : (
+                      <>
+                        <span className="font-semibold text-white">{visitCount.toLocaleString()}</span>
+                        <span className="ml-1 text-gray-400">visits</span>
+                      </>
+                    )}
+                  </span>
+                </motion.div>
+              )}
+            </div>
 
             {/* Back to Top Button */}
             <motion.button
