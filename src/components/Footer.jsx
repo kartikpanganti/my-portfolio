@@ -42,48 +42,33 @@ const Footer = () => {
     };
   }, [toggleRecaptchaBadge]);
 
-  // Visit counter effect using hits.sh
+  // Visit counter effect using localStorage
   useEffect(() => {
-    const fetchVisitCount = async () => {
+    const updateVisitCount = () => {
       try {
-        // Using hits.sh counter service
-        const response = await fetch('https://hits.sh/kartikpanganti.me.svg?view=today-total', {
-          method: 'GET',
-          cache: 'no-cache'
-        });
+        // Get current count and last visit time from localStorage
+        let count = parseInt(localStorage.getItem('portfolio-visit-count') || '0');
+        const lastVisit = localStorage.getItem('portfolio-last-visit');
+        const now = Date.now();
         
-        if (response.ok) {
-          // Extract count from SVG response headers or use a simpler approach
-          // For now, we'll use a localStorage-based counter as a fallback
-          let count = parseInt(localStorage.getItem('portfolio-visit-count') || '0');
-          const lastVisit = localStorage.getItem('portfolio-last-visit');
-          const now = Date.now();
-          
-          // Increment only if it's a new session (more than 30 minutes since last visit)
-          if (!lastVisit || now - parseInt(lastVisit) > 1800000) {
-            count++;
-            localStorage.setItem('portfolio-visit-count', count.toString());
-            localStorage.setItem('portfolio-last-visit', now.toString());
-          }
-          
-          // Add a base count to make it look more realistic
-          setVisitCount(count + 1247); // Starting from a base number
-        } else {
-          // Fallback to localStorage only
-          const count = parseInt(localStorage.getItem('portfolio-visit-count') || '1247');
-          setVisitCount(count);
+        // Increment only if it's a new session (more than 30 minutes since last visit)
+        if (!lastVisit || now - parseInt(lastVisit) > 1800000) {
+          count++;
+          localStorage.setItem('portfolio-visit-count', count.toString());
+          localStorage.setItem('portfolio-last-visit', now.toString());
         }
+        
+        // Add a base count to show total visits (starting from 1247)
+        setVisitCount(count + 1247);
       } catch (error) {
-        console.error('Error fetching visit count:', error);
-        // Use localStorage as final fallback
-        const count = parseInt(localStorage.getItem('portfolio-visit-count') || '1247');
-        setVisitCount(count);
+        // If localStorage fails, show base count
+        setVisitCount(1247);
       } finally {
         setIsLoadingVisits(false);
       }
     };
 
-    fetchVisitCount();
+    updateVisitCount();
   }, []);
 
   const socialLinks = [
